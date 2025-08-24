@@ -1,3 +1,5 @@
+//https://cses.fi/problemset/task/1633
+
 #include <iostream>
 #include <vector>
 using namespace std;
@@ -18,9 +20,14 @@ int main()
 			if (i - j >= 0)
 			{
 				dp[i] = (dp[i] + dp[i - j]) % MOD;
+				
 			}
+			cout << dp[i] << " ";
 		}
+		cout << endl;
+	
 	}
+
 
 	cout << dp[n] << endl;
 	return 0;
