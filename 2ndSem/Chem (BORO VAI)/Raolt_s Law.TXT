@@ -1,0 +1,1 @@
+Raoult’s law states that “the vapor pressure of an ideal solution of a non-volatile solute is equal to the vapor pressure of the pure solvent at that temperature multiplied by its mole fraction.” This law is named after French chemist François-Marie Raoult, who discovered it in 1887.
