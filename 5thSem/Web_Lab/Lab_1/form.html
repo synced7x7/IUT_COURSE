@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Client Registration Form</title>
+    <link rel="stylesheet" href="form.css">
+</head>
+
+<body>
+    <div class="container">
+        <a href="#" class="back-btn">← Back to Main</a>
+        <div class="form-section">
+
+            <h1>Client Registration Form</h1>
+            <h2>Start Your Fitness Journey</h2>
+
+            <form>
+
+                <div class="form-group">
+                    <label for="fullName">Full Name:</label>
+                    <input type="text" id="fullName" placeholder="Enter your full name">
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address:</label>
+                    <input type="email" id="email" placeholder="Enter your email">
+                </div>
+
+
+                <dev>
+                    <lebel>Fitness Level:</lebel>
+                    <input type="radio" id="01" name="level1" value="Beginner">
+                    <lebel for="01"> Beginner </lebel>
+                    <input type="radio" id="02" name="level2" value="Intermediate">
+                    <lebel for="02"> Intermediate </lebel>
+                    <input type="radio" id="03" name="level3" value="Advance">
+                    <lebel for="03"> Advance </lebel>
+                </dev>
+
+                <div class="form-group">
+                    <label for="primaryGoal">Primary Goal:</label>
+                    <select id="primaryGoal">
+                        <option value="" disabled selected>Select your main goal</option>
+                        <option value="weight-loss">Weight Loss</option>
+                        <option value="muscle-gain">Muscle Gain</option>
+                        <option value="endurance">Endurance</option>
+                        <option value="general-fitness">General Fitness</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Training Preferences:</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="personalTraining" name="training_preferences"
+                                value="personal-training">
+                            <label for="personalTraining">Personal Training</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="groupClasses" name="training_preferences" value="group-classes">
+                            <label for="groupClasses">Group Classes</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="nutritionCoaching" name="training_preferences"
+                                value="nutrition-coaching">
+                            <label for="nutritionCoaching">Nutrition Coaching</label>
+                        </div>
+                    </div>
+                </div>
+        </div>
+
+        <div class="form-group">
+            <label for="healthInfo">Health Information:</label>
+            <textarea id="healthInfo" rows="4" placeholder="Any injuries or health concerns?"></textarea>
+        </div>
+
+        <div class="button-group">
+            <button type="submit" class="submit-btn">Start Training</button>
+            <button type="reset" class="clear-btn">Clear Form</button>
+        </div>
+        </form>
+    </div>
+</body>
+
+</html>
