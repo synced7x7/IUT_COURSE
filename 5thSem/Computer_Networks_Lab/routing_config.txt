@@ -1,0 +1,9 @@
+!!router 1
+enable 
+config term
+router rip 
+version 2
+net 192.35.10.0
+net 192.35.20.0
+net 192.35.90.0
+end
