@@ -1,0 +1,28 @@
+ORG 100h
+START:
+
+MOV AH, 1
+INT 21h  
+
+MOV BL, 2
+MOV AH, 0
+DIV BL      
+
+CMP AH, 0    
+JE PRINT_E   
+
+MOV DL, 'O'
+MOV AH, 2
+INT 21h
+JMP END_PROGRAM
+
+PRINT_E:   
+MOV DL, 'E'
+MOV AH, 2
+INT 21h
+
+END_PROGRAM:
+MOV AH, 4Ch 
+INT 21h  
+
+END START    

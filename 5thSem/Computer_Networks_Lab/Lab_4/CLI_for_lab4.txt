@@ -1,0 +1,106 @@
+###Lab Alpha
+ip dhcp pool alphaOne
+default-router 192.168.35.1
+network 192.168.35.0 255.255.255.0
+exit
+
+ip dhcp pool alphaTwo
+default-router 192.168.36.1
+network 192.168.36.0 255.255.255.0
+exit
+
+
+int g0/0
+ip address 192.168.35.1 255.255.255.0
+no shutdown
+exit
+
+int g1/0
+ip address 192.168.36.1 255.255.255.0
+no shutdown
+exit
+
+int g2/0
+ip address 10.10.10.1 255.255.255.252  
+no shutdown
+exit 
+
+router rip
+version 2
+network 192.168.35.0
+network 192.168.36.0
+network 10.10.10.0     
+no auto-summary
+
+###Lab Beta
+ip dhcp pool betaOne
+network 192.168.37.0 255.255.255.0
+default-router 192.168.37.1
+exit
+
+ip dhcp pool betaTwo
+network 192.168.38.0 255.255.255.0
+default-router 192.168.38.1
+exit
+
+int g0/0
+ip address 192.168.37.1 255.255.255.0
+no shutdown
+exit
+
+int g1/0
+ip address 192.168.38.1 255.255.255.0
+no shutdown
+exit
+
+int g2/0
+ip address 10.10.10.5 255.255.255.252  
+no shutdown
+
+router ospf 1
+network 192.168.37.0 0.0.0.255 area 0
+network 192.168.38.0 0.0.0.255 area 0
+network 10.10.10.4 0.0.0.3 area 0  
+
+
+
+###Core Router
+int g0/0
+ip address 10.10.10.2 255.255.255.252  
+no shutdown
+exit
+
+int g1/0
+ip address 10.10.10.6 255.255.255.252  
+no shutdown
+exit
+
+int g2/0
+ip address 192.168.39.1 255.255.255.0   
+no shutdown
+exit
+
+router ospf 1
+network 10.10.10.4 0.0.0.3 area 0
+network 192.168.39.0 0.0.0.255 area 0
+
+router rip
+version 2
+network 10.10.10.0
+network 192.168.39.0
+no auto-summary
+exit
+
+
+###Router Redistribution
+
+router ospf 1
+redistribute rip metric 1 subnets
+redistribute static metric 1 subnets
+
+router rip
+version 2
+redistribute ospf 1 metric 1
+redistribute static metric 1
+
+

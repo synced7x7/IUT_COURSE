@@ -1,0 +1,11 @@
+MOV AX, 260  
+
+MOV BX, 10
+MUL BX   
+
+MOV BX, 5
+DIV BX
+
+ADD AX, 32
+SUB AX, 1
+

@@ -1,0 +1,51 @@
+int g0/0
+ip address 192.35.8.1 255.255.255.192
+ip helper-address 192.35.8.2
+no shutdown 
+exit
+
+int g1/0
+ip address 192.35.8.65 255.255.255.240
+ip helper-address 192.35.8.2
+no shutdown 
+exit
+
+int g2/0
+ip address 192.35.8.81 255.255.255.240
+ip helper-address 192.35.8.2
+no shutdown 
+exit
+
+int g2/0
+ip address 192.35.8.81 255.255.255.240
+ip helper-address 192.35.8.2
+no shutdown 
+exit
+
+int g4/0
+ip address 192.35.8.97 255.255.255.240
+ip helper-address 192.35.8.2
+no shutdown 
+exit
+
+int g3/0
+ip address 192.35.8.129 255.255.255.192
+ip helper-address 192.35.8.2
+no shutdown 
+exit
+
+copy running-config startup-config
+
+
+ip dhcp pool admin
+default-router 192.35.8.97
+network 192.35.8.96 255.255.255.240
+exit
+
+ip dhcp pool management
+network 192.35.8.128 255.255.255.192
+default-router 192.35.8.129
+exit
+
+
+

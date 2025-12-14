@@ -1,0 +1,29 @@
+ORG 0100h
+START:
+
+MOV AH, 1
+INT 21h 
+
+MOV BL, AL
+CMP BL, 96
+JG SMALLER
+JMP GREATER
+                   
+SMALLER:
+SUB BL, 32
+MOV AH, 2
+MOV DL, BL
+INT 21h
+RET                   
+
+GREATER:
+ADD BL, 32
+
+MOV AH, 2
+MOV DL, BL
+INT 21h
+
+MOV AH, 4CH
+INT 21H
+
+END START
