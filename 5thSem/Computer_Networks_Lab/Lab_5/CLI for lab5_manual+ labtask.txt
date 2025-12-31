@@ -1,0 +1,61 @@
+#Switch
+vlan 10
+exit
+
+vlan 20
+exit
+
+#interfaces connected to PCs(accessLinks)
+int fa0/2
+switchport mode access
+switchport access vlan 10
+no shutdown
+
+int fa0/3
+switchport mode access
+switchport access vlan 30
+no shutdown
+
+
+#interfaces connected to Router(Trunk link)
+int fa0/1
+switchport mode trunk
+switchport trunk allowed vlan all
+no shutdown
+
+#Router
+#Interfaces connected to switch(Trunk link)
+int g0/0.10
+encapsulation dot1q 10
+ip address 172.17.10.1 255.255.255.0 !!default gateway
+exit
+
+int g0/0.30
+encapsulation dot1q 30
+ip address 172.17.30.1 255.255.255.0
+exit
+
+int g0/0 
+no shutdown
+
+#verify
+show ip route
+
+
+--------
+For lab task
+#Router
+int g0/0.10
+encapsulation dot1q 10
+ip address 192.35.36.1 255.255.255.224
+exit
+
+int g0/0.20
+encapsulation dot1q 20
+ip address 192.35.36.33 255.255.255.224
+exit
+
+int g0/0.30
+encapsulation dot1q 30
+ip address 192.35.36.65 255.255.255.224
+exit
