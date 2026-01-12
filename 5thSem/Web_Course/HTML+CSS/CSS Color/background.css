@@ -1,0 +1,33 @@
+
+body {
+  /* background-image: url("bg_photo.jpg"); */
+  font-size: larger;
+  font-weight: bolder;
+}
+
+
+
+.header-box,  .shorthand-box {
+    padding: 20px;
+    margin: 30px auto;
+    width: 80%;
+    max-width: 800px;
+    box-shadow: 01 4px 8px rgba(218, 20, 20, 0.1);
+}
+
+
+
+.background-repeat { 
+background-image: url("small_bg.jpg");
+  background-repeat: repeat-x; /* x: horizontal, y- vertical , no-repeat  */
+  border: 2px solid black;
+    background-position: right top; /* for no-repeat */
+}
+
+.scroll-section {
+  background-image: url("bg_scroll.png");
+  background-size: 20%;
+  background-repeat: no-repeat;
+  background-position: right top;
+  background-attachment: fixed; /* scroll */
+}

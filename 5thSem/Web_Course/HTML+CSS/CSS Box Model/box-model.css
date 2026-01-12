@@ -1,0 +1,26 @@
+* {
+    padding: 0;
+    border: 0 solid rgb(139, 139, 236);
+    margin: 0;
+}
+
+.one {
+    background-color: lightgray;
+    /* width: 200px;
+    height: 100px;
+    padding: 15px;
+    border: 5px solid rgb(139, 139, 236);
+    margin: 20px; */
+}
+
+.two {
+    background-color: rgb(135, 179, 136);
+    /* width: 200px;
+    height: 100px;
+    padding: 15px;
+    border: 5px solid rgb(30, 87, 63);
+    margin: 20px;
+    box-sizing: border-box; /* content-box is the default CSS box model where the width and height only apply to the content area, 
+                                and padding and borders are added to the outside, increasing the total size. In contrast, 
+                                border-box includes the content, padding, and border within the specified width and height */ */
+}

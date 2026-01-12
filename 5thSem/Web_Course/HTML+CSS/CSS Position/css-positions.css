@@ -1,0 +1,289 @@
+.relative-box.moved {
+    position: relative;
+    top: 20px;
+    left: 30px;
+    background: #e74c3c;
+}
+/* Absolute Positioning */
+.absolute-section {
+    position: relative;
+    min-height: 300px;
+}
+
+.absolute-container {
+    position: relative;
+    height: 250px;
+    background: #ecf0f1;
+    border: 2px dashed #bdc3c7;
+    border-radius: 5px;
+    margin-top: 15px;
+}
+
+.absolute-box {
+    position: absolute;
+    background: #9b59b6;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    width: 120px;
+    text-align: center;
+}
+
+/* Fixed Positioning */
+.fixed-box {
+    position: fixed;
+    background: #e74c3c;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    z-index: 1000;
+}
+.sticky-nav {
+    background: #34495e;
+    color: white;
+    padding: 15px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 18px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.sticky-header {
+    padding: 12px 15px;
+    font-weight: bold;
+    font-size: 16px;
+    position: sticky;
+    top: 50px; /* Below the main nav */
+    z-index: 5;
+    border-bottom: 2px solid;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    padding: 20px;
+    background: #f5f5f5;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.position-section {
+    background: white;
+    padding: 25px;
+    margin: 25px 0;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+h2 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #ecf0f1;
+}
+
+/* Static Positioning */
+.static-box {
+    background: #3498db;
+    color: white;
+    padding: 15px;
+    margin: 5px;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+/* Relative Positioning */
+.relative-box {
+    background: #2ecc71;
+    color: white;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 5px;
+    width: 200px;
+}
+
+
+
+
+
+
+
+.absolute-box.top-left {
+    top: 10px;
+    left: 10px;
+}
+
+.absolute-box.top-right {
+    top: 10px;
+    right: 10px;
+}
+
+.absolute-box.bottom-left {
+    bottom: 10px;
+    left: 10px;
+}
+
+.absolute-box.bottom-right {
+    bottom: 10px;
+    right: 10px;
+}
+
+.absolute-box.center {
+    top: 50%;
+    left: 50%;
+    background: #e67e22;
+}
+
+
+
+.chat-button {
+    bottom: 30px;
+    right: 30px;
+}
+
+.help-button {
+    bottom: 30px;
+    left: 30px;
+}
+
+.scroll-hint {
+    text-align: center;
+    font-style: italic;
+    color: #7f8c8d;
+    margin-top: 15px;
+}
+
+/* Sticky Positioning - UPDATED */
+.sticky-demo-container {
+    border: 2px solid #bdc3c7;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 20px;
+    max-height: 400px;
+    overflow-y: auto;
+    background: #f8f9fa;
+}
+
+
+.menu-category {
+    margin-bottom: 0;
+}
+
+
+
+.meat-header {
+    background: #e74c3c;
+    color: white;
+    border-bottom-color: #c0392b;
+}
+
+.veggie-header {
+    background: #27ae60;
+    color: white;
+    border-bottom-color: #229954;
+}
+
+.cheese-header {
+    background: #f39c12;
+    color: white;
+    border-bottom-color: #d68910;
+}
+
+.sauce-header {
+    background: #8e44ad;
+    color: white;
+    border-bottom-color: #7d3c98;
+}
+
+.menu-item {
+    padding: 10px 20px;
+    border-bottom: 1px solid #ecf0f1;
+    background: white;
+    transition: background-color 0.2s;
+}
+
+.menu-item:hover {
+    background: #ecf0f1;
+}
+
+.menu-item:nth-child(even) {
+    background: #f8f9fa;
+}
+
+.sticky-hint {
+    text-align: center;
+    font-style: italic;
+    color: #7f8c8d;
+    margin-top: 15px;
+    padding: 10px;
+    background: #fff3cd;
+    border-radius: 5px;
+    border: 1px solid #ffeaa7;
+}
+
+/* Spacer for scrolling */
+.spacer {
+    height: 1000px;
+    background: linear-gradient(180deg, #ecf0f1, #bdc3c7);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #2c3e50;
+    font-size: 18px;
+    border-radius: 10px;
+    margin: 25px 0;
+}
+
+.spacer p {
+    margin: 10px 0;
+    max-width: 400px;
+}
+
+/* Box common styles */
+.box {
+    transition: all 0.3s ease;
+}
+
+.box:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}

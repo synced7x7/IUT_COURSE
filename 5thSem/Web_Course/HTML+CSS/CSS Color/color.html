@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Colors - Complete Guide</title>
+    <link rel="stylesheet" href="color.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎨 CSS Colors Guide</h1>
+            <p>Understanding color systems and best practices in web design</p>
+        </header>
+
+        <!-- Color Systems Section -->
+        <section class="color-system">
+            <h2>1. CSS Color Systems</h2>
+            
+            <div class="color-grid">
+                <div class="color-item">
+                    <div class="color-box hex">#FF6B6B</div>
+                    <h3>HEX Colors</h3>
+                    <p><code>#RRGGBB</code> or <code>#RGB</code></p>
+                    <p>#FF6B6B, #4ECDC4, #45B7D1</p>
+                </div>
+
+                <div class="color-item">
+                    <div class="color-box rgb">RGB(106, 176, 76)</div>
+                    <h3>RGB Colors</h3>
+                    <p><code>rgb(red, green, blue)</code></p>
+                    <p>Each value: 0-255</p>
+                </div>
+
+                <div class="color-item">
+                    <div class="color-box rgba">RGBA(255, 193, 7, 0.7)</div>
+                    <h3>RGBA Colors</h3>
+                    <p><code>rgba(red, green, blue, alpha)</code></p>
+                    <p>Alpha: 0 (transparent) to 1 (opaque)</p>
+                </div>
+
+                <div class="color-item">
+                    <div class="color-box hsl">HSL(348, 100%, 66%)</div>
+                    <h3>HSL Colors</h3>
+                    <p><code>hsl(hue, saturation, lightness)</code></p>
+                    <p>More intuitive color control</p>
+                </div>
+
+                <div class="color-item">
+                    <div class="color-box hsla">HSLA(195, 63%, 58%, 0.5)</div>
+                    <h3>HSLA Colors</h3>
+                    <p><code>hsla(hue, saturation, lightness, alpha)</code></p>
+                    <p>HSL with transparency</p>
+                </div>
+
+                <div class="color-item">
+                    <div class="color-box named">CornflowerBlue</div>
+                    <h3>Named Colors</h3>
+                    <p>Predefined color names</p>
+                    <p>red, blue, coral, rebeccapurple</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Color Properties Section -->
+        <section class="color-properties">
+            <h2>2. CSS Color Properties</h2>
+            
+            <div class="properties-demo">
+                <div class="property-item">
+                    <div class="demo-box color-demo">
+                        <p>color: #2C3E50</p>
+                    </div>
+                    <h3>color</h3>
+                    <p>Sets text color</p>
+                </div>
+
+                <div class="property-item">
+                    <div class="demo-box background-demo">
+                        <p>background-color: #ECF0F1</p>
+                    </div>
+                    <h3>background-color</h3>
+                    <p>Sets background color</p>
+                </div>
+
+                <div class="property-item">
+                    <div class="demo-box border-demo">
+                        <p>border-color: #E74C3C</p>
+                    </div>
+                    <h3>border-color</h3>
+                    <p>Sets border color</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Color Harmony Section -->
+        <section class="color-harmony">
+            <h2>3. Color Harmony & Schemes</h2>
+            
+            <div class="harmony-grid">
+                <div class="harmony-item monochromatic">
+                    <h3>Monochromatic</h3>
+                    <p>Different shades of same hue</p>
+                    <div class="harmony-colors">
+                        <div class="harmony-color" style="background: #2C3E50;"></div>
+                        <div class="harmony-color" style="background: #3498DB;"></div>
+                        <div class="harmony-color" style="background: #85C1E9;"></div>
+                    </div>
+                </div>
+
+                <div class="harmony-item analogous">
+                    <h3>Analogous</h3>
+                    <p>Colors next to each other on wheel</p>
+                    <div class="harmony-colors">
+                        <div class="harmony-color" style="background: #E74C3C;"></div>
+                        <div class="harmony-color" style="background: #E67E22;"></div>
+                        <div class="harmony-color" style="background: #F1C40F;"></div>
+                    </div>
+                </div>
+
+                <div class="harmony-item complementary">
+                    <h3>Complementary</h3>
+                    <p>Colors opposite each other</p>
+                    <div class="harmony-colors">
+                        <div class="harmony-color" style="background: #3498DB;"></div>
+                        <div class="harmony-color" style="background: #E74C3C;"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Best Practices Section -->
+        <section class="best-practices">
+            <h2>4. Color Usage Best Practices</h2>
+            
+            <div class="practices-grid">
+                <div class="practice-item">
+                    <h3>🎯 Establish Hierarchy</h3>
+                    <p>Use color to guide attention - primary actions should stand out</p>
+                </div>
+
+                <div class="practice-item">
+                    <h3>👁️ Ensure Accessibility</h3>
+                    <p>Maintain sufficient contrast ratio (4.5:1 for normal text)</p>
+                </div>
+
+                <div class="practice-item">
+                    <h3>🎨 Limit Your Palette</h3>
+                    <p>Use 2-3 primary colors + neutrals for consistency</p>
+                </div>
+
+                <div class="practice-item">
+                    <h3>💡 Use Color Meaning</h3>
+                    <p>Green = success, Red = error, Blue = information</p>
+                </div>
+
+                <div class="practice-item">
+                    <h3>📱 Consider Context</h3>
+                    <p>Test colors in different lighting and devices</p>
+                </div>
+
+                <div class="practice-item">
+                    <h3>🌈 Create Consistency</h3>
+                    <p>Use CSS variables for maintainable color schemes</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Practical Example -->
+        <section class="practical-example">
+            <h2>5. Practical Color Implementation</h2>
+            
+            <div class="example-ui">
+                <div class="ui-header">
+                    <h3>Example Website Header</h3>
+                </div>
+                <div class="ui-content">
+                    <button class="btn primary">Primary Action</button>
+                    <button class="btn secondary">Secondary Action</button>
+                    <button class="btn success">Success</button>
+                    <button class="btn danger">Danger</button>
+                </div>
+                <div class="ui-footer">
+                    <p>This demonstrates proper color usage in UI components</p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+</body>
+</html>

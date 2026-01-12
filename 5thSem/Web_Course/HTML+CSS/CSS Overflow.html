@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+.container {
+  width: 300px;
+  height: 150px;
+  border: 2px solid #333;
+  margin: 20px;
+  padding: 10px;
+  float: left;
+}
+
+.visible { overflow: visible; }
+.hidden  { overflow: hidden; }
+.scroll  { overflow: scroll; }
+.auto    { overflow: auto; }
+
+.content {
+  width: 400px;  /* Larger than container */
+  background: #f0f0f0;
+  padding: 10px;
+}
+</style>
+</head>
+<body>
+
+<div class="container visible">
+  <h3>overflow: visible</h3>
+  <div class="content">
+    This content is wider than its container and spills out the sides.
+  </div>
+</div>
+
+<div class="container hidden">
+  <h3>overflow: hidden</h3>
+  <div class="content">
+    This content is wider but gets cut off at the container edges.
+  </div>
+</div>
+
+<div class="container scroll">
+  <h3>overflow: scroll</h3>
+  <div class="content">
+    Scrollbars always visible, even if content fits.
+  </div>
+</div>
+
+<div class="container auto">
+  <h3>overflow: auto</h3>
+  <div class="content">
+    Scrollbars appear only when content overflows (like now).
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Positioning - Learn the 5 Types</title>
+    <link rel="stylesheet" href="css-positions.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 CSS Positioning - The 5 Types</h1>
+        
+        <!-- Static Positioning -->
+        <div class="position-section static-section">
+            <h2>1. Static (Default)</h2>
+            <p>Elements flow normally in the document. <strong>top, right, bottom, left and z-index have NO effect.</strong></p>
+            <div class="box static-box">Static Box 1</div>
+            <div class="box static-box">Static Box 2</div>
+            <div class="box static-box">Static Box 3</div>
+        </div>
+
+        <!-- Relative Positioning -->
+        <div class="position-section relative-section">
+            <h2>2. Relative</h2>
+            <p>Positioned relative to its normal position. <strong>Other elements don't adjust to fill the gap.</strong></p>
+            <div class="box relative-box normal">Normal Position</div>
+            <div class="box relative-box moved">Moved 20px down & 30px right</div>
+            <div class="box relative-box">Static Sibling</div>
+        </div>
+
+        <!-- Absolute Positioning -->
+        <div class="position-section absolute-section">
+            <h2>3. Absolute</h2>
+            <p>Positioned relative to nearest positioned ancestor. <strong>Removed from normal document flow.</strong></p>
+            <div class="absolute-container">
+                <div class="box absolute-box top-left">Top Left</div>
+                <div class="box absolute-box top-right">Top Right</div>
+                <div class="box absolute-box bottom-left">Bottom Left</div>
+                <div class="box absolute-box bottom-right">Bottom Right</div>
+                <div class="box absolute-box center">Center</div>
+            </div>
+        </div>
+
+        <!-- Fixed Positioning -->
+        <div class="position-section fixed-section">
+            <h2>4. Fixed</h2>
+            <p>Positioned relative to viewport. <strong>Stays in same place even when scrolling.</strong></p>
+            <div class="box fixed-box chat-button">💬 Chat Support</div>
+            <div class="box fixed-box help-button">❓ Help</div>
+            <p class="scroll-hint">← Scroll down to see fixed positioning in action!</p>
+        </div>
+
+        <!-- Sticky Positioning -->
+        <!-- <div class="position-section sticky-section">
+            <h2>5. Sticky</h2>
+            <p>Switches between relative and fixed based on scroll position. <strong>Sticks when you scroll to it.</strong></p>
+            <div class="sticky-container">
+                <div class="sticky-header">Sticky Header - Scroll Down</div>
+                <div class="content">Content item 1</div>
+                <div class="content">Content item 2</div>
+                <div class="content">Content item 3</div>
+                <div class="content">Content item 4</div>
+                <div class="content">Content item 5</div>
+                <div class="content">Content item 6</div>
+                <div class="content">Content item 7</div>
+                <div class="content">Content item 8</div>
+            </div>
+        </div> -->
+
+          <div class="position-section sticky-section">
+            <h2>5. Sticky</h2>
+            <p>Switches between relative and fixed based on scroll position. <strong>Sticks when you scroll to it.</strong></p>
+            
+            <div class="sticky-demo-container">
+                <div class="sticky-nav">
+                    🍕 Pizza Toppings Menu (Scroll ↓)
+                </div>
+                
+                <div class="menu-category">
+                    <div class="sticky-header meat-header">🥩 Meat Toppings</div>
+                    <div class="menu-item">Pepperoni</div>
+                    <div class="menu-item">Sausage</div>
+                    <div class="menu-item">Bacon</div>
+                    <div class="menu-item">Ham</div>
+                    <div class="menu-item">Chicken</div>
+                    <div class="menu-item">Ground Beef</div>
+                    <div class="menu-item">Salami</div>
+                </div>
+
+                <div class="menu-category">
+                    <div class="sticky-header veggie-header">🥦 Veggie Toppings</div>
+                    <div class="menu-item">Mushrooms</div>
+                    <div class="menu-item">Onions</div>
+                    <div class="menu-item">Bell Peppers</div>
+                    <div class="menu-item">Olives</div>
+                    <div class="menu-item">Tomatoes</div>
+                    <div class="menu-item">Spinach</div>
+                    <div class="menu-item">Jalapeños</div>
+                    <div class="menu-item">Pineapple</div>
+                </div>
+
+                <div class="menu-category">
+                    <div class="sticky-header cheese-header">🧀 Cheese Toppings</div>
+                    <div class="menu-item">Mozzarella</div>
+                    <div class="menu-item">Parmesan</div>
+                    <div class="menu-item">Cheddar</div>
+                    <div class="menu-item">Feta</div>
+                    <div class="menu-item">Ricotta</div>
+                    <div class="menu-item">Goat Cheese</div>
+                    <div class="menu-item">Provolone</div>
+                </div>
+
+                <div class="menu-category">
+                    <div class="sticky-header sauce-header">🍅 Sauce Toppings</div>
+                    <div class="menu-item">Marinara</div>
+                    <div class="menu-item">Alfredo</div>
+                    <div class="menu-item">Pesto</div>
+                    <div class="menu-item">BBQ Sauce</div>
+                    <div class="menu-item">Buffalo Sauce</div>
+                    <div class="menu-item">Ranch Dressing</div>
+                </div>
+            </div>
+            
+            <p class="sticky-hint">Scroll slowly and watch the category headers stick at the top!</p>
+        <!-- Spacer to see fixed positioning
+        <div class="spacer">
+            <p>Keep scrolling to see all positioning types in action!</p>
+            <p>Fixed elements stay visible while you scroll.</p>
+            <p>Sticky elements stick when they reach the top.</p>
+        </div> -->
+    </div>
+</body>
+</html>

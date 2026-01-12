@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portfolio - HTML Elements Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        
+        header, nav, main, section, article, aside, footer {
+            margin: 10px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+        
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        input, textarea, select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        button {
+            padding: 10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .grid-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+        
+        progress {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <h1>Welcome to My Portfolio</h1>
+        <p><strong>John Doe</strong> - <em>Web Developer</em></p>
+        <hr>
+        <p>This portfolio demonstrates various <mark>HTML elements</mark> for educational purposes.</p>
+    </header>
+
+    <!-- Navigation -->
+    <nav>
+        <h2>Navigation Menu</h2>
+        <ul>
+            <li><a href="#about">About Me</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="grid-container">
+        <!-- Left Column -->
+        <section>
+            <!-- About Section -->
+            <article id="about">
+                <h2>About Me</h2>
+                <p>Hello! I'm a passionate web developer with experience in various technologies.</p>
+                <blockquote>
+                    "The best way to predict the future is to create it." - Peter Drucker
+                </blockquote>
+                <p>I enjoy learning new technologies and sharing knowledge with others.</p>
+            </article>
+
+            <!-- Projects Section -->
+            <article id="projects">
+                <h2>My Projects</h2>
+                <div>
+                    <h3>Project 1: E-commerce Website</h3>
+                    <p>Built using <abbr title="HyperText Markup Language">HTML</abbr>, <abbr title="Cascading Style Sheets">CSS</abbr>, and JavaScript.</p>
+                    <p>Project status: <progress value="75" max="100">75%</progress></p>
+                </div>
+                
+                <div>
+                    <h3>Project 2: Blog Platform</h3>
+                    <p>Created with React and Node.js</p>
+                    <p>Project status: <progress value="90" max="100">90%</progress></p>
+                </div>
+            </article>
+
+            <!-- Education Section -->
+            <article>
+                <h2>Education</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Degree</th>
+                            <th>Institution</th>
+                            <th>Year</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Bachelor of Computer Science</td>
+                            <td>University of Technology</td>
+                            <td>2020-2024</td>
+                        </tr>
+                        <tr>
+                            <td>Web Development Bootcamp</td>
+                            <td>Code Academy</td>
+                            <td>2023</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </article>
+        </section>
+
+        <!-- Right Column - Sidebar -->
+        <aside>
+            <!-- Skills Section -->
+            <section id="skills">
+                <h2>Technical Skills</h2>
+                <h3>Programming Languages:</h3>
+                <ul>
+                    <li>HTML5</li>
+                    <li>CSS3</li>
+                    <li>JavaScript</li>
+                    <li>Python</li>
+                </ul>
+                
+                <h3>Frameworks & Libraries:</h3>
+                <ol>
+                    <li>React</li>
+                    <li>Node.js</li>
+                    <li>Express</li>
+                    <li>Bootstrap</li>
+                </ol>
+                
+                <h3>Tools:</h3>
+                <ul>
+                    <li>Git</li>
+                    <li>VS Code</li>
+                    <li>Chrome DevTools</li>
+                </ul>
+            </section>
+
+            <!-- Contact Form -->
+            <section id="contact">
+                <h2>Contact Me</h2>
+                <form>
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" required>
+                    
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                    
+                    <label for="subject">Subject:</label>
+                    <select id="subject" name="subject">
+                        <option value="work">Work Opportunity</option>
+                        <option value="question">Question</option>
+                        <option value="collaboration">Collaboration</option>
+                    </select>
+                    
+                    <label for="message">Message:</label>
+                    <textarea id="message" name="message" rows="4" required></textarea>
+                    
+                    <button type="submit">Send Message</button>
+                </form>
+            </section>
+
+            <!-- Additional Info -->
+            <section>
+                <h2>Quick Facts</h2>
+                <details>
+                    <summary>My Daily Routine</summary>
+                    <p>I start my day with coding practice, work on projects in the afternoon, and learn new technologies in the evening.</p>
+                </details>
+                
+                <details>
+                    <summary>Favorite Code Editor</summary>
+                    <p>Visual Studio Code with the Dark+ theme.</p>
+                </details>
+            </section>
+        </aside>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <h2>Connect With Me</h2>
+        <p>
+            Email: <a href="mailto:john@example.com">john@example.com</a> |
+            Phone: <a href="tel:+1234567890">+1 (234) 567-890</a>
+        </p>
+        
+        <p>Visit my <a href="https://github.com" target="_blank">GitHub Profile</a></p>
+        
+        <p><small>&copy; 2024 John Doe. All rights reserved.</small></p>
+        
+        <p>Current time: <time datetime="2024-01-01">January 1, 2024</time></p>
+        
+        <p>HTML and CSS are <sup>awesome</sup> technologies to learn <sub>web development</sub>!</p>
+    </footer>
+</body>
+</html>

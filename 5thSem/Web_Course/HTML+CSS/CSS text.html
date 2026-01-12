@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Text Properties Demo</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        line-height: 1.6;
+    }
+
+    h2 {
+        margin-top: 40px;
+        color: #333;
+    }
+
+    .demo-box {
+        border: 1px solid #ccc;
+        padding: 15px;
+        margin: 10px 0;
+    }
+
+    /* TEXT ALIGN */
+    .ta-center { text-align: center; }
+    .ta-right { text-align: right; }
+
+
+    /* VERTICAL ALIGN */
+    .v-align td {
+        border: 1px solid #aaa;
+        padding: 10px;
+        height: 50px;
+    }
+    .v-middle { vertical-align: middle; }
+    .v-bottom { vertical-align: bottom; }
+
+    /* DIRECTION + UNICODE-BIDI */
+    .rtl-text {
+        direction: rtl;
+        unicode-bidi: bidi-override;
+        border: 1px solid #aaa;
+        padding: 10px;
+        width: 200px;
+    }
+
+    /* TEXT DECORATION */
+    .td-example {
+        text-decoration-line: underline;
+        text-decoration-color: red;
+        text-decoration-style: wavy;
+        text-decoration-thickness: 3px;
+    }
+
+    /* TEXT TRANSFORM */
+    .tt-none { text-transform: none; }
+    .tt-cap   { text-transform: capitalize; }
+    .tt-up    { text-transform: uppercase; }
+    .tt-low   { text-transform: lowercase; }
+</style>
+</head>
+<body>
+
+<h1>Text Properties Demonstration</h1>
+
+<!-- TEXT ALIGN -->
+<h2>1. text-align</h2>
+<div class="demo-box ta-center">This text is centered.</div>
+<div class="demo-box ta-right">This text is right aligned.</div>
+
+<!-- VERTICAL ALIGN -->
+<h2>3. vertical-align (table example)</h2>
+<table class="v-align">
+    <tr>
+        <td class="v-middle">Middle</td>
+        <td class="v-bottom">Bottom</td>
+    </tr>
+</table>
+
+<!-- DIRECTION + UNICODE BIDI -->
+<h2>4. direction + unicode-bidi</h2>
+<div class="rtl-text">
+    This text is forced to display right-to-left using direction: rtl and unicode-bidi: bidi-override.
+</div>
+
+<!-- TEXT DECORATION -->
+<h2>5. Text Decoration Properties</h2>
+<div class="demo-box td-example">
+    Underlined text with custom color, wavy style, and thicker line using:
+    <br>text-decoration-line, color, style, thickness.
+</div>
+
+<!-- TEXT TRANSFORM -->
+<h2>6. text-transform</h2>
+<div class="demo-box tt-none">none - this text stays as written</div>
+<div class="demo-box tt-cap">capitalize - each word becomes capitalized</div>
+<div class="demo-box tt-up">uppercase - this becomes uppercase</div>
+<div class="demo-box tt-low">LOWERCASE - this becomes lowercase</div>
+
+</body>
+</html>
