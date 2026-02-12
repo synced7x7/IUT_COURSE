@@ -1,24 +1,24 @@
 body {
-width: 760px;
+  width: 760px;
 }
 
 h1 {
-    border: 1px solid #7f1616;
+  border: 1px solid #7f1616;
 }
 
-
 p {
-width: 230px;
-float: left;
-margin: 5px;
-padding: 5px;
-background-color: #efefef;
+  width: 230px;
+  float: left;
+  margin: 5px;
+  padding: 5px;
+  background-color: #efefef;
 }
 
 div {
-    border: 1px solid #333333;
-    /* overflow: auto; */
+  border: 1px solid #dc0000;
+  overflow-x: auto; /* Horizontal overflow only */
+  overflow-y: hidden; /* Vertical overflow only */
 }
-/* .clear {
-    clear: left;
-} */
+.clear {
+  clear: left;
+}

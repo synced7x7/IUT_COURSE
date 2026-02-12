@@ -1,0 +1,5 @@
+You are required to work with the task from Lab 03 and make the necessary modifications. For each schema, insert at least five sample input records.
+
+Create a Home page with distinct buttons for each schema. Then implement the frontend part of the code with basic routing and display all the values using simple JSX (no need to implement complex UI or CSS).
+
+Your files should be sorted in 2 different folder: Frontend and Backend. Each should contain its corresponding code (exclude node\_modules). Zip the folders together and rename it to your ID (Example: 102.zip) and upload it in the classroom.

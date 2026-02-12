@@ -41,7 +41,7 @@
             border-radius: 5px;
         }
         .focus-example input:focus {
-            border-color: dodgerblue;
+            border-color: rgb(216, 234, 253);
             outline: none;
             background-color: #f0f8ff;
         }
@@ -57,6 +57,5 @@
         }
         .active-example a:active {
             color: white;
-            background-color: black;
+            background-color: pink;
         }
-    </style>

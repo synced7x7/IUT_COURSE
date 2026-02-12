@@ -6,7 +6,7 @@ INT 21h
 
 MOV BL, 2
 MOV AH, 0
-DIV BL      
+DIV BL     ; quotient -> AL, remainder ->AH 
 
 CMP AH, 0    
 JE PRINT_E   

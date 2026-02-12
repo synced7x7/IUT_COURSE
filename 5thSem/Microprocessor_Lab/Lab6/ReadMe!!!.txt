@@ -1,0 +1,1 @@
+Focus on how stack works, IP, PC not the algorithm or the code 

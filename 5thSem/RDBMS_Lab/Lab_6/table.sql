@@ -1,0 +1,59 @@
+-- Drop tables if they exist (in reverse order of dependencies)
+DROP TABLE IF EXISTS EMPLOYEES CASCADE;
+DROP TABLE IF EXISTS CUSTOMERS CASCADE;
+DROP TABLE IF EXISTS DEPARTMENTS CASCADE;
+
+-- Create DEPARTMENTS table
+CREATE TABLE DEPARTMENTS (
+    DEPT_ID INT PRIMARY KEY,
+    DEPT_NAME VARCHAR(100) NOT NULL,
+    LOCATION VARCHAR(100)
+);
+
+-- Create EMPLOYEES table
+CREATE TABLE EMPLOYEES (
+    EMP_ID INT PRIMARY KEY,
+    EMP_NAME VARCHAR(100) NOT NULL,
+    DEPT_ID INT,
+    SALARY NUMERIC(10, 2),
+    MANAGER_ID INT,
+    FOREIGN KEY (DEPT_ID) REFERENCES DEPARTMENTS(DEPT_ID),
+    FOREIGN KEY (MANAGER_ID) REFERENCES EMPLOYEES(EMP_ID)
+);
+
+-- Create CUSTOMERS table
+CREATE TABLE CUSTOMERS (
+    CUST_ID INT PRIMARY KEY,
+    FIRST_NAME VARCHAR(50),
+    LAST_NAME VARCHAR(50),
+    EMAIL VARCHAR(100),
+    PHONE VARCHAR(20)
+);
+
+-- Insert data into DEPARTMENTS (must be inserted first due to foreign key constraint)
+INSERT INTO DEPARTMENTS (DEPT_ID, DEPT_NAME, LOCATION) VALUES
+(10, 'IT', 'New York'),
+(20, 'HR', 'Boston'),
+(30, 'Finance', 'Chicago'),
+(40, 'Marketing', 'Seattle');
+
+-- Insert data into EMPLOYEES
+INSERT INTO EMPLOYEES (EMP_ID, EMP_NAME, DEPT_ID, SALARY, MANAGER_ID) VALUES
+(101, 'John Smith', 10, 50000, NULL),
+(102, 'Sarah Johnson', 20, 60000, 101),
+(103, 'Mike Wilson', 10, 55000, 101),
+(104, 'Emily Brown', 30, 65000, 101),
+(105, 'David Lee', NULL, 45000, 102);
+
+-- Insert data into CUSTOMERS
+INSERT INTO CUSTOMERS (CUST_ID, FIRST_NAME, LAST_NAME, EMAIL, PHONE) VALUES
+(1, 'john', 'SMITH', 'john.smith@email.com', '555-1234'),
+(2, 'SARAH', 'johnson', ' sarah@email.com ', '555-5678'),
+(3, 'mike', 'WILSON', 'mike.wilson@email.com', '555-9012');
+
+
+SELECT * FROM EMPLOYEES;
+
+SELECT * FROM DEPARTMENTS;
+
+SELECT * FROM CUSTOMERS;
