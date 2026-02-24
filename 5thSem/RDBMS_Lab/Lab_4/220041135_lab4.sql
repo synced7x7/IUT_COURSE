@@ -209,7 +209,7 @@ DECLARE
     seq TEXT;
 BEGIN
     yy := TO_CHAR(adm, 'YY');
-    seq := LPAD(nextval('student_seq')::TEXT, 2, '0');
+    seq := LPAD(nextval('public.student_seq')::TEXT, 2, '0');
     RETURN yy || '00' || d || p || s || seq;
 END;
 $$ LANGUAGE plpgsql;
