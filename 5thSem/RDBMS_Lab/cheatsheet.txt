@@ -1,0 +1,268 @@
+insert into branch (name, location) VALUES
+('A', 'Dhaka'), ('B', 'Chittagong')
+
+DO $$
+DECLARE
+    n int := 5;
+    sum int :=0;
+    i int;
+BEGIN
+    for i in 1..n-1 LOOP
+        if n % i = 0 THEN
+            sum := sum + i;
+        end if;
+    end LOOP;
+
+    if sum = n THEN
+        RAISE NOTICE '% is a perfect number' , n;
+    elsif sum !=n then
+        RAISE NOTICE '% is a not perfect number', n;
+    end IF;
+END;
+$$;
+
+create or replace PROCEDURE odd_even_counter(start_val int, end_val int)
+LANGUAGE plpgsql
+AS $$
+call odd_even_counter(24,  30);
+--Implicit Cursor
+--------------------
+DO $$
+DECLARE
+    emp RECORD;
+BEGIN
+    FOR emp IN SELECT id, name FROM employees LOOP
+        RAISE NOTICE 'ID: %, Name: %', emp.id, emp.name;
+    END LOOP;
+END $$;
+--Explicit Cursor
+-----------------
+DO $$
+DECLARE
+    emp_cursor CURSOR FOR SELECT id, name FROM employees;
+    emp_record RECORD;
+BEGIN
+    OPEN emp_cursor;
+
+    LOOP
+        FETCH emp_cursor INTO emp_record;
+        EXIT WHEN NOT FOUND;
+
+        RAISE NOTICE 'ID: %, Name: %', emp_record.id, emp_record.name;
+    END LOOP;
+
+    CLOSE emp_cursor;
+END $$;
+---------------------------
+DO $$
+DECLARE
+	 cur_update CURSOR FOR SELECT emp_id, salary FROM employees WHERE dept_id = 20 FOR UPDATE; 
+	 --without for update it is in read only mode
+	r RECORD;
+BEGIN
+	OPEN cur_update;
+	LOOP
+		FETCH cur_update INTO r;
+		EXIT WHEN NOT FOUND;
+
+		UPDATE employees
+		SET salary = salary*1.10
+		WHERE CURRENT OF cur_update; --CURRENT means where the cursor is currently pointing
+	END LOOP;
+	CLOSE cur_update;
+END;
+$$;
+------------------------------------
+CREATE OR REPLACE FUNCTION set_created_at()
+RETURNS TRIGGER LANGUAGE plpgsql AS
+$$
+BEGIN 
+	NEW.created_at := CURRENT_TIMESTAMP;
+	RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER trg_set_created_at
+BEFORE INSERT ON students
+FOR EACH ROW 
+EXECUTE FUNCTION set_created_at();
+-------------------------------------------------
+CREATE OR REPLACE FUNCTION find_loan_scheme(p_user INT)
+RETURNS INT AS $$
+DECLARE 
+	total_trans NUMERIC;
+	rec RECORD;
+BEGIN
+	SELECT SUM(amount) INTO total_trans
+	FROM transactions
+	WHERE user_id = p_user;
+
+	FOR rec IN
+		SELECT * FROM loan_type ORDER BY min_trans DESC
+	LOOP
+		IF total_trans >= rec.min_trans THEN
+			RETURN rec.scheme;
+		END IF;
+	END LOOP;
+
+	RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;
+
+SELECT find_loan_scheme(1);
+-----------------------------------------------------------------
+GET DIAGNOSTICS affected_rows = ROW_COUNT;
+--------------------------------------------------------------
+INSERT INTO bill VALUES 
+(NEW.ssn, EXTRACT(MONTH FROM CURRENT_DATE),
+EXTRACT(YEAR FROM CURRENT_DATE), 0);
+RETURN NEW;
+------------------------------------------------
+current_date, current_time
+-------------------------------------------------
+CREATE SEQUENCE student_seq START 1;
+
+
+CREATE OR REPLACE FUNCTION gen_id(adm DATE, d CHAR, p CHAR, s CHAR)
+RETURNS VARCHAR AS $$
+DECLARE
+    yy TEXT;
+    seq TEXT;
+BEGIN
+    yy := TO_CHAR(adm, 'YY');
+    seq := LPAD(nextval('public.student_seq')::TEXT, 2, '0');
+    RETURN yy || '00' || d || p || s || seq;
+END;
+$$ LANGUAGE plpgsql;
+-------------------------------------------------------------------
+WITH RECURSIVE task_dependencies AS (
+    SELECT 
+        task_id,
+        depends_on
+    FROM project_tasks
+    WHERE depends_on IS NOT NULL
+    
+    UNION
+    
+    SELECT 
+        td.task_id,
+        pt.depends_on
+    FROM task_dependencies td
+    JOIN project_tasks pt ON td.depends_on = pt.task_id
+    WHERE pt.depends_on IS NOT NULL
+)
+SELECT 
+    task_id,
+    depends_on
+FROM task_dependencies
+ORDER BY task_id, depends_on;
+------------------------------------
+DENSE_RANK() OVER (PARTITION BY department ORDER BY salary DESC) AS dept_rank
+Function	Result
+RANK	1,2,2,4
+DENSE_RANK	1,2,2,3
+ROW_NUMBER	1,2,3,4
+-----------------------------------
+salary - LAG(salary) OVER (ORDER BY salary) AS salary_difference
+----------------------------------------------------------------------------
+WITH RECURSIVE emp_dep as (
+    select 
+        emp_id, 
+        emp_name,
+        manager_id,
+        department, 
+        1 as level,
+        cast(emp_id as TEXT) as path
+    from employee_hierarchy
+    where manager_id is NULL
+
+    UNION
+
+    select 
+        e.emp_id,
+        e.emp_name,
+        e.manager_id,
+        e.department,
+        h.level + 1,
+        h.path || ',' || cast(e.emp_id as TEXT)
+    from employee_hierarchy e 
+    join emp_dep h on e.manager_id = h.emp_id
+),
+subordinates as (
+    select 
+        h1.emp_id, 
+        count(h2.emp_id) as total_subordinates
+    from emp_dep h1
+    left join emp_dep h2 on h2.path like h1.path || ',%'
+    group by h1.emp_id
+)
+select 
+    h.emp_id,
+    h.emp_name,
+    h.department,
+    h.manager_id, 
+    h.level,
+    h.path,
+    s.total_subordinates
+FROM emp_dep h
+JOIN subordinates s ON h.emp_id = s.emp_id
+ORDER BY h.level, h.emp_id;
+-------------------------------------------------------------------
+CONCAT(FIRST_NAME, ' ', LAST_NAME) AS FULL_NAME
+INITCAP(FIRST_NAME) AS FIRST_NAME,
+INITCAP(LAST_NAME) AS LAST_NAME
+UPPER(FIRST_NAME) AS FIRST_NAME,
+LOWER(EMAIL) AS EMAIL
+LENGTH(EMAIL) AS EMAIL_LENGTH
+LPAD(PHONE, 15, '*') AS LEFT_PADDED,
+RPAD(PHONE, 15, '-') AS RIGHT_PADED
+SUBSTR(EMAIL, 1, 4) AS FIRST_4_CHARS,
+SUBSTR(EMAIL, POSITION('@' IN EMAIL) + 1) AS DOMAIN 
+ROUND(AVG(discount_percent), 2) AS avg_discount
+-------------------------------------------------------
+where cast(regexp_replace(date_str, '.*(\d{4}).*', '\1') as INTEGER) >= 2010;
+-----------------------------------------------------------
+GROUP BY ROLLUP(department, product)
+order by department nulls last, product nulls last;
+COALESCE(dept, '*** GRAND TOTAL ***') //if null then uses the second option
+-------------------------------------------------------------
+SELECT
+    emp_id,
+    name,
+    TO_CHAR(hire_date, 'DD-MM-YYYY') AS formatted_hire_date
+FROM employees;
+------------------------
+min(hire_date)
+extract(year from latest) - extract(year from earliest);//integer
+(transaction_date + INTERVAL '12 months')::DATE
+(DATE '2024-03-01' - transaction_date)
+email !~ '^[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}$';
+REGEXP_MATCHES(full_name, '(Dr\.|Mr\.|Mrs\.|Ms\.|Prof\.|Rev\.|Sir\.)') AS title_match,
+REGEXP_REPLACE(full_name, '(Dr\.|Mr\.|Mrs\.|Ms\.|Prof\.|Rev\.|Sir\.)\.*', '') AS name_without_title
+FROM customer_data
+WHERE full_name ~ '(Dr\.|Mr\.|Mrs\.|Ms\.|Prof\.|Rev\.|Sir\.?)';
+--------------------------------------
+1NF: Each column must contain atomic values (single value only)
+because every column should depend on the FULL key.
+2NF: Remove data that depends only on part of a composite key
+3NF: Remove columns that depend on other non-key columns.
+---------------------------------------------------
+insert into Orders_1NF
+select OrderID, OrderDate, CustomerId, CustomerName, CustomerPhone, CustomerAddress,
+       Product2ID, Product2Name, Product2Price, Product2Qty, PaymentMethod, PaymentStatus
+from Orders_Unnormalized
+where Product2ID is not NULL
+union all
+select OrderID, OrderDate, CustomerId, CustomerName, CustomerPhone, CustomerAddress,
+       Product1ID, Product1Name, Product1Price, Product1Qty, PaymentMethod, PaymentStatus
+from Orders_Unnormalized
+where Product1ID is not NULL
+------------------------------------------
+CREATE TABLE OrderItems_2NF (
+    OrderID    INT REFERENCES Orders_2NF(OrderID),
+    ProductID  INT REFERENCES Products_2NF(ProductID),
+    ProductQty INT,
+    PRIMARY KEY (OrderID, ProductID)
+);
+
+

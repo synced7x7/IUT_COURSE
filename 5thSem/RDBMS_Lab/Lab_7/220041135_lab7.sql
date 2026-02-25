@@ -1,64 +1,140 @@
-DROP TABLE IF EXISTS t1;
-CREATE TABLE t1 (data VARCHAR(50));
-
-INSERT INTO t1 VALUES ('FALL 2014');
-INSERT INTO t1 VALUES ('2014 CODE-B');
-INSERT INTO t1 VALUES ('CODE-A 2014 CODE-D');
-INSERT INTO t1 VALUES ('ADSHLHSALK');
-INSERT INTO t1 VALUES ('FALL 2004');
-INSERT INTO t1 VALUES ('SPRING 2010');
-INSERT INTO t1 VALUES ('WINTER 2020');
-
-DROP TABLE IF EXISTS employees;
-CREATE TABLE employees (
-    employee_id INTEGER,
-    department VARCHAR(50),
-    designation VARCHAR(50),
-    hire_date DATE
+-- Table t1
+CREATE TABLE t1 (
+    id SERIAL PRIMARY KEY,
+    date_str VARCHAR(50)  -- e.g., '2015-08-20', 'Date: 2009/01/15'
 );
 
-INSERT INTO employees VALUES 
-    (1, 'Sales', 'Manager', '2005-02-15'),
-    (2, 'Sales', 'Manager', '2007-01-21'),
-    (3, 'Human Resources', 'Assistant', '2010-05-10'),
-    (4, 'IT', 'Developer', '2015-03-12'),
-    (5, 'IT', 'Manager', '2008-11-20');
+-- Sales table
+CREATE TABLE sales (
+    department VARCHAR(50),
+    amount     NUMERIC
+);
 
-DROP TABLE IF EXISTS order_details;
+-- Order details table
 CREATE TABLE order_details (
-    order_id INTEGER,
     department VARCHAR(50),
-    sales NUMERIC
+    product    VARCHAR(50),
+    sales      NUMERIC
 );
 
-INSERT INTO order_details VALUES 
-    (1, 'Clothing', 500),
-    (2, 'Clothing', 600),
-    (3, 'Electronics', 1500),
-    (4, 'Electronics', 1200),
-    (5, 'Furniture', 1300),
-    (6, 'Furniture', 1600);
+-- Employees table
+CREATE TABLE employees (
+    emp_id      SERIAL PRIMARY KEY,
+    name        VARCHAR(100),
+    department  VARCHAR(50),
+    designation VARCHAR(50),
+    hire_date   DATE
+);
 
+-- Sample Data
+INSERT INTO t1 (date_str) VALUES ('2008-03-15'),('2010-07-22'),('2015-11-01'),('1999-05-30'),('2023-01-10');
 
---Task 1
-select * 
-from t1 
-where (substring(data from '\d{4}'))::INTEGER >= 2010;
+INSERT INTO sales VALUES ('HR',500),('HR',800),('IT',700),('IT',600),('Finance',1300),('Finance',200);
 
---Task 2
+INSERT INTO order_details VALUES
+('HR','PenDrive',300),('HR','Laptop',800),
+('IT','Monitor',600),('IT','Keyboard',700),
+('Finance','Tablet',900),('Finance','Phone',600);
+
+INSERT INTO employees (name, department, designation, hire_date) VALUES
+('Alice',  'IT',      'Manager',   '2005-03-12'),
+('Bob',    'HR',      'Analyst',   '2012-07-19'),
+('Carol',  'Finance', 'Developer', '2018-11-05'),
+('Dave',   'IT',      'Developer', '2009-06-23'),
+('Eve',    'HR',      'Manager',   '2021-01-15');
+
+--task1
+select * from t1
+where cast(regexp_replace(date_str, '.*(\d{4}).*', '\1') as INTEGER) >= 2010;
+
+--task2
 DO $$
 DECLARE
-    row_data VARCHAR(50);
-    extracted_year VARCHAR(4);
+    rec RECORD;
+    extracted_year int;
 BEGIN
-    FOR row_data IN SELECT data FROM t1 LOOP
-        extracted_year := SUBSTRING(row_data FROM '\d{4}');
-        
-        IF extracted_year IS NOT NULL THEN
-            RAISE NOTICE 'Data: %, Year: %', row_data, extracted_year;
-        ELSE
-            RAISE NOTICE 'Data: %, Year: No year found', row_data;
-        END IF;
-    END LOOP;
-END $$;
+    for rec in
+        select * from t1
+    LOOP
+        extracted_year := cast(regexp_replace(rec.date_str, '.*(\d{4}).*', '\1') as INTEGER);
+        RAISE NOTICE 'Extracted Year: %' , extracted_year;
+    end LOOP;
+end $$;
 
+--task3
+select * from sales
+where amount >1200
+group by department, amount;
+
+--task4
+DO $$
+DECLARE
+    rec RECORD;
+    dp varchar;
+BEGIN
+    for rec in
+        select * from sales
+        where amount >1000
+        group by department, amount
+    LOOP
+       dp := rec.department;
+        raise notice 'Required department: %', dp;
+    end LOOP;
+end $$;
+
+--task5
+select department, product, sum(sales) as subtotals
+from order_details
+GROUP BY ROLLUP(department, product)
+order by department nulls last, product nulls last;
+
+--task6
+DO $$
+DECLARE
+    dept    VARCHAR(50);
+    prod    VARCHAR(50);
+    total   NUMERIC;
+BEGIN
+    FOR dept, prod, total IN
+        SELECT
+            department,
+            product,
+            SUM(sales)
+        FROM order_details
+        GROUP BY ROLLUP(department, product)
+        ORDER BY department NULLS LAST, product NULLS LAST
+    LOOP
+        RAISE NOTICE 'Department: %, Product: %, Subtotal: %',
+            COALESCE(dept, '*** GRAND TOTAL ***'),
+            COALESCE(prod, '-- Subtotal --'),
+            total;
+    END LOOP;
+END;
+$$;
+
+--task7
+select 
+    department, designation 
+from employees
+group by CUBE(department, designation)
+order by department nulls last, designation nulls last;
+
+--task8
+SELECT
+    emp_id,
+    name,
+    TO_CHAR(hire_date, 'DD-MM-YYYY') AS formatted_hire_date
+FROM employees;
+
+--task9
+DO $$
+DECLARE
+    earliest date;
+    latest date;
+    difference int;
+BEGIN
+    select min(hire_date) into earliest from employees;
+    select max(hire_date) into latest from employees;
+    difference := extract(year from latest) - extract(year from earliest);
+    raise notice 'difference: %', difference;
+END $$;
