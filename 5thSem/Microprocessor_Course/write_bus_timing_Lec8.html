@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Write BUS Timing (Complete BUS Cycle)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;600;700&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #f5f5f0;
+    font-family: 'IBM Plex Sans', monospace;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  .container {
+    background: white;
+    border: 1px solid #ccc;
+    padding: 30px 40px 30px 20px;
+    width: 860px;
+  }
+
+  h1 {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    text-align: left;
+    margin-bottom: 18px;
+    color: #111;
+    letter-spacing: 0.3px;
+  }
+
+  .diagram {
+    position: relative;
+    width: 100%;
+  }
+
+  svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .caption {
+    text-align: center;
+    font-size: 13px;
+    font-weight: 700;
+    margin-top: 12px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    color: #111;
+    letter-spacing: 0.5px;
+  }
+
+  .footer {
+    text-align: center;
+    font-size: 11px;
+    color: #555;
+    margin-top: 16px;
+    font-family: 'IBM Plex Sans', sans-serif;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>WRITE BUS Timing (Complete BUS Cycle)</h1>
+  <div class="diagram">
+    <svg viewBox="0 0 820 560" xmlns="http://www.w3.org/2000/svg" font-family="'IBM Plex Mono', monospace">
+
+      <!-- ===== LAYOUT CONSTANTS =====
+           Left label area: 0-90
+           Signal area: 90-790
+           T1: 90-240  T2: 240-390  T3: 390-490(TW)  TW: 490-540  T4: 540-690 (but we skip TW to match style — show it as optional)
+           Actually match read diagram proportions: T1=90-230, T2=230-370, TW=370-450, T3=450-570, T4=570-720
+           We'll use: T1=100, T2=100, TW=60(optional/shown), T3=100, T4=100 widths
+           x0=90, T1=90-210, T2=210-330, T3=330-450, TW=450-510, T4=510-630
+           Total signal width = 540px (90 to 720+)
+      -->
+
+      <!-- ========== TIMING RULER ========== -->
+      <!-- 800ns total span arrow -->
+      <line x1="110" y1="22" x2="730" y2="22" stroke="#111" stroke-width="1.2"/>
+      <polygon points="110,18 110,26 100,22" fill="#111"/>
+      <polygon points="730,18 730,26 740,22" fill="#111"/>
+      <text x="415" y="18" text-anchor="middle" font-size="12" fill="#111" font-weight="600">800ns</text>
+
+      <!-- 200ns span (T1 only) -->
+      <line x1="110" y1="36" x2="270" y2="36" stroke="#111" stroke-width="1.2"/>
+      <polygon points="110,32 110,40 100,36" fill="#111"/>
+      <polygon points="270,32 270,40 280,36" fill="#111"/>
+      <text x="190" y="32" text-anchor="middle" font-size="12" fill="#111" font-weight="600">200ns</text>
+
+      <!-- T-state labels -->
+      <text x="190" y="58" text-anchor="middle" font-size="13" fill="#111" font-weight="600">T₁</text>
+      <text x="350" y="58" text-anchor="middle" font-size="13" fill="#111" font-weight="600">T₂</text>
+      <!-- TW label (red, like read diagram) -->
+      <text x="502" y="54" text-anchor="middle" font-size="12" fill="#cc0000" font-weight="700">T_w</text>
+      <!-- zigzag for TW (break symbol) -->
+      <polyline points="490,60 496,68 502,56 508,68 514,60" stroke="#cc0000" stroke-width="1.8" fill="none"/>
+
+      <text x="590" y="58" text-anchor="middle" font-size="13" fill="#111" font-weight="600">T₃</text>
+      <text x="700" y="58" text-anchor="middle" font-size="13" fill="#111" font-weight="600">T₄</text>
+
+      <!-- Vertical dashed dividers -->
+      <line x1="270" y1="60" x2="270" y2="545" stroke="#ff6666" stroke-width="1" stroke-dasharray="5,4"/>
+      <line x1="430" y1="60" x2="430" y2="545" stroke="#ff6666" stroke-width="1" stroke-dasharray="5,4"/>
+      <line x1="480" y1="60" x2="480" y2="545" stroke="#ff6666" stroke-width="1" stroke-dasharray="5,4"/>
+      <line x1="560" y1="60" x2="560" y2="545" stroke="#ff6666" stroke-width="1" stroke-dasharray="5,4"/>
+      <line x1="640" y1="60" x2="640" y2="545" stroke="#ff6666" stroke-width="1" stroke-dasharray="5,4"/>
+
+      <!-- ==================== ROW: CLK ==================== -->
+      <text x="88" y="103" text-anchor="end" font-size="13" fill="#007700" font-weight="600">CLK</text>
+      <!-- CLK waveform: square wave, 5 full cycles across T1-T4 -->
+      <polyline points="
+        90,110
+        90,80 110,80 110,110
+        150,110 150,80 190,80 190,110
+        230,110 230,80 270,80 270,110
+        310,110 310,80 350,80 350,110
+        390,110 390,80 430,80 430,110
+        455,110 455,80 480,80 480,110
+        505,110 505,80 530,80 530,110
+        560,110 560,80 600,80 600,110
+        640,110 640,80 680,80 680,110
+        730,110
+      " stroke="#22aa22" stroke-width="2" fill="none"/>
+
+      <!-- ==================== ROW: A19-A16 / S6-S3 ==================== -->
+      <text x="88" y="150" text-anchor="end" font-size="11" fill="#111">A₁₉-A₁₆/</text>
+      <text x="88" y="163" text-anchor="end" font-size="11" fill="#111">S₆-S₃</text>
+
+      <!-- Idle lines before T1 -->
+      <line x1="90" y1="155" x2="110" y2="155" stroke="#111" stroke-width="1.5"/>
+      <!-- Hex/transition marks at T1 start -->
+      <line x1="110" y1="140" x2="125" y2="155" stroke="#111" stroke-width="1.5"/>
+      <line x1="110" y1="170" x2="125" y2="155" stroke="#111" stroke-width="1.5"/>
+      <!-- Label S6-S3 inside T1 -->
+      <line x1="125" y1="155" x2="265" y2="155" stroke="#111" stroke-width="1.5"/>
+      <text x="185" y="151" text-anchor="middle" font-size="10" fill="#111">S₆-S₃</text>
+      <!-- Transition at T2 -->
+      <line x1="265" y1="155" x2="280" y2="140" stroke="#111" stroke-width="1.5"/>
+      <line x1="265" y1="155" x2="280" y2="170" stroke="#111" stroke-width="1.5"/>
+      <!-- A19-A16 block T2 through T3/TW -->
+      <line x1="280" y1="140" x2="555" y2="140" stroke="#111" stroke-width="1.5"/>
+      <line x1="280" y1="170" x2="555" y2="170" stroke="#111" stroke-width="1.5"/>
+      <text x="415" y="158" text-anchor="middle" font-size="11" fill="#111">A₁₉-A₁₆</text>
+      <!-- Transition into T4 -->
+      <line x1="555" y1="140" x2="570" y2="155" stroke="#111" stroke-width="1.5"/>
+      <line x1="555" y1="170" x2="570" y2="155" stroke="#111" stroke-width="1.5"/>
+      <!-- S7-S3 in T4 -->
+      <line x1="570" y1="155" x2="725" y2="155" stroke="#111" stroke-width="1.5"/>
+      <text x="647" y="151" text-anchor="middle" font-size="10" fill="#111">S₇-S₃</text>
+      <!-- Transition end -->
+      <line x1="725" y1="155" x2="735" y2="155" stroke="#111" stroke-width="1.5"/>
+
+      <!-- ==================== ROW: AD15-AD0 ==================== -->
+      <text x="88" y="218" text-anchor="end" font-size="11" fill="#cc2200" font-weight="600">AD₁₅-AD₀</text>
+
+      <!-- Idle before -->
+      <line x1="90" y1="210" x2="110" y2="210" stroke="#cc2200" stroke-width="1.8"/>
+
+      <!-- T1: Address block (red hex shape) -->
+      <line x1="110" y1="195" x2="125" y2="210" stroke="#cc2200" stroke-width="1.8"/>
+      <line x1="110" y1="225" x2="125" y2="210" stroke="#cc2200" stroke-width="1.8"/>
+      <line x1="125" y1="210" x2="265" y2="210" stroke="#cc2200" stroke-width="1.8"/>
+      <!-- top and bottom lines for address block -->
+      <line x1="110" y1="195" x2="265" y2="195" stroke="#cc2200" stroke-width="1.8"/>
+      <line x1="110" y1="225" x2="265" y2="225" stroke="#cc2200" stroke-width="1.8"/>
+      <text x="183" y="213" text-anchor="middle" font-size="11" fill="#cc2200" font-weight="600">Address</text>
+
+      <!-- Address setup arrow -->
+      <line x1="140" y1="233" x2="270" y2="233" stroke="#111" stroke-width="1"/>
+      <polygon points="140,230 140,236 132,233" fill="#111"/>
+      <polygon points="270,230 270,236 278,233" fill="#111"/>
+      <text x="205" y="245" text-anchor="middle" font-size="10" fill="#111">Address setup</text>
+
+      <!-- T2 transition then Float -->
+      <line x1="265" y1="195" x2="280" y2="210" stroke="#cc2200" stroke-width="1.8"/>
+      <line x1="265" y1="225" x2="280" y2="210" stroke="#cc2200" stroke-width="1.8"/>
+      <!-- Float label T2 -->
+      <line x1="280" y1="210" x2="425" y2="210" stroke="#cc2200" stroke-width="1.8"/>
+      <text x="350" y="206" text-anchor="middle" font-size="11" fill="#cc2200">Float</text>
+
+      <!-- Transition into Data block at T3/TW -->
+      <line x1="425" y1="210" x2="440" y2="195" stroke="#cc2200" stroke-width="1.8"/>
+      <line x1="425" y1="210" x2="440" y2="225" stroke="#cc2200" stroke-width="1.8"/>
+
+      <!-- Data written to memory block T3-T4 -->
+      <line x1="440" y1="195" x2="635" y2="195" stroke="#cc2200" stroke-width="1.8"/>
+      <line x1="440" y1="225" x2="635" y2="225" stroke="#cc2200" stroke-width="1.8"/>
+      <text x="537" y="213" text-anchor="middle" font-size="11" fill="#cc2200" font-weight="600">Data written to memory</text>
+
+      <!-- Data setup arrow -->
+      <line x1="460" y1="233" x2="640" y2="233" stroke="#111" stroke-width="1"/>
+      <polygon points="460,230 460,236 452,233" fill="#111"/>
+      <polygon points="640,230 640,236 648,233" fill="#111"/>
+      <text x="550" y="245" text-anchor="middle" font-size="10" fill="#111">Data Setup</text>
+
+      <!-- Transition into Float at end T4 -->
+      <line x1="635" y1="195" x2="650" y2="210" stroke="#cc2200" stroke-width="1.8"/>
+      <line x1="635" y1="225" x2="650" y2="210" stroke="#cc2200" stroke-width="1.8"/>
+      <!-- Float after T4 -->
+      <line x1="650" y1="210" x2="735" y2="210" stroke="#cc2200" stroke-width="1.8"/>
+      <text x="692" y="206" text-anchor="middle" font-size="11" fill="#cc2200">Float</text>
+
+      <!-- ==================== ROW: M/IO ==================== -->
+      <text x="88" y="290" text-anchor="end" font-size="12" fill="#8800aa">M/IO̅</text>
+
+      <line x1="90" y1="285" x2="115" y2="285" stroke="#8800aa" stroke-width="1.8"/>
+      <line x1="115" y1="285" x2="130" y2="270" stroke="#8800aa" stroke-width="1.8"/>
+      <line x1="130" y1="270" x2="635" y2="270" stroke="#8800aa" stroke-width="1.8"/>
+      <line x1="635" y1="270" x2="650" y2="285" stroke="#8800aa" stroke-width="1.8"/>
+      <line x1="650" y1="285" x2="735" y2="285" stroke="#8800aa" stroke-width="1.8"/>
+
+      <!-- ==================== ROW: ALE ==================== -->
+      <text x="88" y="330" text-anchor="end" font-size="12" fill="#8800aa">ALE</text>
+
+      <line x1="90" y1="330" x2="130" y2="330" stroke="#8800aa" stroke-width="1.8"/>
+      <!-- ALE pulse during T1 -->
+      <line x1="130" y1="330" x2="130" y2="312" stroke="#8800aa" stroke-width="1.8"/>
+      <line x1="130" y1="312" x2="240" y2="312" stroke="#8800aa" stroke-width="1.8"/>
+      <line x1="240" y1="312" x2="240" y2="330" stroke="#8800aa" stroke-width="1.8"/>
+      <line x1="240" y1="330" x2="735" y2="330" stroke="#8800aa" stroke-width="1.8"/>
+
+      <!-- ==================== ROW: DT/R' ==================== -->
+      <text x="88" y="367" text-anchor="end" font-size="12" fill="#8800aa">DT/R̅</text>
+
+      <line x1="90" y1="368" x2="120" y2="368" stroke="#8800aa" stroke-width="1.8"/>
+      <!-- DT/R goes HIGH (transmit) during T1 through T4 end for write -->
+      <line x1="120" y1="368" x2="120" y2="352" stroke="#8800aa" stroke-width="1.8"/>
+      <line x1="120" y1="352" x2="648" y2="352" stroke="#8800aa" stroke-width="1.8"/>
+      <line x1="648" y1="352" x2="648" y2="368" stroke="#8800aa" stroke-width="1.8"/>
+      <line x1="648" y1="368" x2="735" y2="368" stroke="#8800aa" stroke-width="1.8"/>
+
+      <!-- ==================== ROW: WR' ==================== -->
+      <text x="88" y="408" text-anchor="end" font-size="12" fill="#8800aa">WR̅</text>
+
+      <line x1="90" y1="400" x2="270" y2="400" stroke="#8800aa" stroke-width="1.8"/>
+      <!-- WR' goes LOW at T2 -->
+      <line x1="270" y1="400" x2="270" y2="418" stroke="#8800aa" stroke-width="1.8"/>
+      <line x1="270" y1="418" x2="638" y2="418" stroke="#8800aa" stroke-width="1.8"/>
+      <!-- WR' rises at trailing edge T4 -->
+      <line x1="638" y1="418" x2="638" y2="400" stroke="#8800aa" stroke-width="1.8"/>
+      <line x1="638" y1="400" x2="735" y2="400" stroke="#8800aa" stroke-width="1.8"/>
+
+      <!-- ==================== ROW: DEN' ==================== -->
+      <text x="88" y="450" text-anchor="end" font-size="12" fill="#8800aa">DEN̅</text>
+
+      <line x1="90" y1="442" x2="260" y2="442" stroke="#8800aa" stroke-width="1.8"/>
+      <!-- DEN goes low at T2 -->
+      <line x1="260" y1="442" x2="260" y2="460" stroke="#8800aa" stroke-width="1.8"/>
+      <line x1="260" y1="460" x2="645" y2="460" stroke="#8800aa" stroke-width="1.8"/>
+      <line x1="645" y1="460" x2="645" y2="442" stroke="#8800aa" stroke-width="1.8"/>
+      <line x1="645" y1="442" x2="735" y2="442" stroke="#8800aa" stroke-width="1.8"/>
+
+      <!-- ==================== ROW: READY ==================== -->
+      <text x="88" y="500" text-anchor="end" font-size="12" fill="#111">READY</text>
+
+      <!-- READY stays LOW during TW window, then goes HIGH -->
+      <line x1="90" y1="495" x2="430" y2="495" stroke="#111" stroke-width="1.8"/>
+      <!-- dips low at TW -->
+      <line x1="430" y1="495" x2="430" y2="510" stroke="#111" stroke-width="1.8"/>
+      <line x1="430" y1="510" x2="510" y2="510" stroke="#111" stroke-width="1.8"/>
+      <line x1="510" y1="510" x2="510" y2="495" stroke="#111" stroke-width="1.8"/>
+      <line x1="510" y1="495" x2="735" y2="495" stroke="#111" stroke-width="1.8"/>
+
+      <!-- Horizontal label lines / baselines for each signal -->
+      <!-- subtle row divider lines -->
+      <line x1="90" y1="128" x2="735" y2="128" stroke="#ddd" stroke-width="0.5"/>
+      <line x1="90" y1="175" x2="735" y2="175" stroke="#ddd" stroke-width="0.5"/>
+      <line x1="90" y1="253" x2="735" y2="253" stroke="#ddd" stroke-width="0.5"/>
+      <line x1="90" y1="300" x2="735" y2="300" stroke="#ddd" stroke-width="0.5"/>
+      <line x1="90" y1="340" x2="735" y2="340" stroke="#ddd" stroke-width="0.5"/>
+      <line x1="90" y1="380" x2="735" y2="380" stroke="#ddd" stroke-width="0.5"/>
+      <line x1="90" y1="425" x2="735" y2="425" stroke="#ddd" stroke-width="0.5"/>
+      <line x1="90" y1="470" x2="735" y2="470" stroke="#ddd" stroke-width="0.5"/>
+      <line x1="90" y1="520" x2="735" y2="520" stroke="#ddd" stroke-width="0.5"/>
+
+    </svg>
+  </div>
+  <p class="caption">Bus Timing for a Write Operation</p>
+  <p class="footer">CSE-4503: Microprocessors and Assembly Language &nbsp;|&nbsp; Islamic University of Technology (IUT)</p>
+</div>
+</body>
+</html>
