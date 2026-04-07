@@ -13,3 +13,11 @@ span {
     height: 150px;
     display: inline-block;
 }
+
+article {
+    background: #26887d;
+    color: white;
+    width: 150px;
+    height: 150px;
+    display: block;
+}

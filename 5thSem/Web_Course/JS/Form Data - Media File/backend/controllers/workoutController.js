@@ -1,0 +1,91 @@
+const Workout = require('../models/workoutModel')
+const cloudinary = require('../config/cloudinary') 
+
+// get all workouts
+const getWorkouts = async (req, res) => {
+  const workouts = await Workout.find({}).sort({createdAt: -1}) // descending order // find({reps: {$gt: 10}})
+
+  res.status(200).json(workouts)
+}
+
+// get a single workout
+const getWorkout = async (req, res) => {
+  const { id } = req.params
+
+  const workout = await Workout.findById(id)
+
+  if (!workout) {
+    return res.status(404).json({error: 'No such workout'})
+  }
+
+  res.status(200).json(workout)
+}
+
+// CREATE WORKOUT WITH IMAGE
+const createWorkout = async (req, res) => {
+  try {
+    const { title, load, reps, difficulty } = req.body
+
+    let imageUrl = ""
+    let imagePublicId = ""
+
+    // If image exists
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: "workouts"
+      })
+
+      imageUrl = result.secure_url
+      imagePublicId = result.public_id
+    }
+
+    const workout = await Workout.create({
+      title,
+      load,
+      reps,
+      difficulty,
+      image: imageUrl,
+      imagePublicId
+    })
+
+    res.status(200).json(workout)
+
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+}
+
+// delete a workout
+const deleteWorkout = async (req, res) => {
+  const { id } = req.params
+  console.log(`delete id: ${id}`)
+  const workout = await Workout.findOneAndDelete({_id: id})
+
+  if(!workout) {
+    return res.status(400).json({error: 'No such workout'})
+  }
+
+  res.status(200).json(workout)
+}
+
+// update a workout
+const updateWorkout = async (req, res) => {
+  const { id } = req.params
+
+  const workout = await Workout.findOneAndUpdate({_id: id}, {
+    ...req.body
+  })
+
+  if (!workout) {
+    return res.status(400).json({error: 'No such workout'})
+  }
+
+  res.status(200).json(workout)
+}
+module.exports = {
+  getWorkouts,
+  getWorkout,
+  createWorkout,
+  deleteWorkout,
+  updateWorkout
+}
