@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>8086 WRITE Bus Timing – Port 1111h, 3 Wait States</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;600;700;800&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #f0ede6;
+    font-family: 'IBM Plex Sans', sans-serif;
+    display: flex; flex-direction: column;
+    align-items: center;
+    padding: 28px 16px 40px;
+  }
+
+  .card {
+    background: #ffffff;
+    border: 2.5px solid #0d1b2a;
+    width: 1000px; max-width: 100%;
+    padding: 24px 24px 20px 20px;
+    box-shadow: 7px 7px 0 #0d1b2a;
+  }
+
+  h1 {
+    font-size: 19px; font-weight: 800;
+    color: #0d1b2a; margin-bottom: 3px;
+    letter-spacing: 0.2px;
+  }
+  .subtitle {
+    font-size: 11px; color: #555; margin-bottom: 14px;
+    font-family: 'IBM Plex Mono', monospace;
+    border-left: 3px solid #e63946;
+    padding-left: 8px;
+  }
+
+  /* condition pills */
+  .pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+  .pill {
+    background: #0d1b2a; color: #f0ede6;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px; font-weight: 600;
+    padding: 4px 11px; border-radius: 2px;
+  }
+  .pill span { color: #f4d35e; }
+
+  .caption {
+    text-align: center; font-weight: 800;
+    font-size: 13px; color: #0d1b2a;
+    margin-top: 10px; letter-spacing: 0.6px;
+    text-transform: uppercase;
+  }
+
+  /* Explanation notes */
+  .notes {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px; margin-top: 16px;
+    border-top: 2px solid #0d1b2a; padding-top: 14px;
+  }
+  .note {
+    background: #f8f6f1;
+    border-left: 3px solid #e63946;
+    padding: 9px 11px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px; line-height: 1.65; color: #222;
+  }
+  .note strong { color: #0d1b2a; display: block; margin-bottom: 3px; }
+  .note .red { color: #e63946; font-weight: 700; }
+  .note .grn { color: #2d6a4f; font-weight: 700; }
+
+  .footer {
+    text-align: center; font-size: 10px;
+    color: #888; margin-top: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>8086 WRITE Bus Timing (Complete BUS Cycle)</h1>
+  <div class="subtitle">I/O Write · Port Address = 1111h · 3 Wait States · @ 5 MHz (200 ns/clock)</div>
+
+  <div class="pills">
+    <div class="pill">Port Address: <span>1111h</span></div>
+    <div class="pill">Operation: <span>I/O WRITE → M/IO̅ = LOW</span></div>
+    <div class="pill">Wait States: <span>3 × TW</span></div>
+    <div class="pill">Total T-States: <span>T1+T2+TW×3+T3+T4 = 7</span></div>
+    <div class="pill">Total Time: <span>7 × 200ns = 1400ns</span></div>
+    <div class="pill">A₁₉-A₁₆: <span>0000 (I/O — upper addr unused)</span></div>
+  </div>
+
+  <!--
+    Layout (all x coords):
+      Label  : 0–108
+      x0=108  (signal start)
+      T1  : 108–218   (110px)
+      T2  : 218–328   (110px)
+      TW1 : 328–408   (80px)
+      TW2 : 408–488   (80px)
+      TW3 : 488–568   (80px)
+      T3  : 568–678   (110px)
+      T4  : 678–788   (110px)
+      end : 788
+      
+    Row heights (centre y):
+      Ruler top  : 22
+      T labels   : 56
+      CLK        : 100  (wave: 82–118)
+      A19-A16    : 155
+      AD15-AD0   : 215
+      M/IO̅       : 280
+      ALE        : 328
+      DT/R̅       : 370
+      WR̅         : 413
+      DEN̅        : 456
+      READY      : 510
+  -->
+
+  <svg viewBox="0 0 900 560" xmlns="http://www.w3.org/2000/svg"
+       font-family="'IBM Plex Mono',monospace" width="100%">
+
+    <!-- ══════════ RULER ══════════ -->
+    <!-- 1400ns span -->
+    <line x1="108" y1="22" x2="788" y2="22" stroke="#0d1b2a" stroke-width="1.4"/>
+    <polygon points="108,18 108,26 100,22" fill="#0d1b2a"/>
+    <polygon points="788,18 788,26 796,22" fill="#0d1b2a"/>
+    <text x="448" y="18" text-anchor="middle" font-size="12" fill="#0d1b2a" font-weight="700">1400 ns  (7 × 200 ns clock periods)</text>
+
+    <!-- 200ns = T1 span -->
+    <line x1="108" y1="36" x2="218" y2="36" stroke="#0d1b2a" stroke-width="1.3"/>
+    <polygon points="108,32 108,40 100,36" fill="#0d1b2a"/>
+    <polygon points="218,32 218,40 226,36" fill="#0d1b2a"/>
+    <text x="163" y="32" text-anchor="middle" font-size="11" fill="#0d1b2a" font-weight="600">200ns</text>
+
+    <!-- T-state labels -->
+    <text x="163" y="57" text-anchor="middle" font-size="13" fill="#0d1b2a" font-weight="700">T₁</text>
+    <text x="273" y="57" text-anchor="middle" font-size="13" fill="#0d1b2a" font-weight="700">T₂</text>
+
+    <!-- TW labels in red -->
+    <text x="368" y="52" text-anchor="middle" font-size="11" fill="#e63946" font-weight="700">TW₁</text>
+    <text x="448" y="52" text-anchor="middle" font-size="11" fill="#e63946" font-weight="700">TW₂</text>
+    <text x="528" y="52" text-anchor="middle" font-size="11" fill="#e63946" font-weight="700">TW₃</text>
+
+    <!-- zigzag break symbols -->
+    <polyline points="320,58 328,68 336,54 344,68 352,58" stroke="#e63946" stroke-width="1.8" fill="none"/>
+    <polyline points="400,58 408,68 416,54 424,68 432,58" stroke="#e63946" stroke-width="1.8" fill="none"/>
+    <polyline points="480,58 488,68 496,54 504,68 512,58" stroke="#e63946" stroke-width="1.8" fill="none"/>
+
+    <text x="623" y="57" text-anchor="middle" font-size="13" fill="#0d1b2a" font-weight="700">T₃</text>
+    <text x="733" y="57" text-anchor="middle" font-size="13" fill="#0d1b2a" font-weight="700">T₄</text>
+
+    <!-- TW bracket -->
+    <line x1="328" y1="68" x2="568" y2="68" stroke="#e63946" stroke-width="1" stroke-dasharray="2,2"/>
+    <text x="448" y="77" text-anchor="middle" font-size="9.5" fill="#e63946" font-weight="700">◄── 3 WAIT STATES (3×200ns = 600ns) ──►</text>
+
+    <!-- Vertical dashed dividers -->
+    <line x1="218" y1="62" x2="218" y2="540" stroke="#e63946" stroke-width="1" stroke-dasharray="5,4"/>
+    <line x1="328" y1="62" x2="328" y2="540" stroke="#e63946" stroke-width="1" stroke-dasharray="5,4"/>
+    <line x1="408" y1="62" x2="408" y2="540" stroke="#e63946" stroke-width="1" stroke-dasharray="5,4"/>
+    <line x1="488" y1="62" x2="488" y2="540" stroke="#e63946" stroke-width="1" stroke-dasharray="5,4"/>
+    <line x1="568" y1="62" x2="568" y2="540" stroke="#e63946" stroke-width="1" stroke-dasharray="5,4"/>
+    <line x1="678" y1="62" x2="678" y2="540" stroke="#e63946" stroke-width="1" stroke-dasharray="5,4"/>
+
+    <!-- TW zone shading -->
+    <rect x="328" y="82" width="240" height="452" fill="#fff0f0" opacity="0.55"/>
+
+    <!-- ══════════ CLK ══════════ -->
+    <text x="103" y="103" text-anchor="end" font-size="13" fill="#2d6a4f" font-weight="700">CLK</text>
+    <polyline points="
+      88,118  88,82  108,82  108,118
+      163,118 163,82 218,82  218,118
+      273,118 273,82 328,82  328,118
+      368,118 368,82 408,82  408,118
+      448,118 448,82 488,82  488,118
+      528,118 528,82 568,82  568,118
+      623,118 623,82 678,82  678,118
+      733,118 733,82 788,82  788,118
+    " stroke="#2d6a4f" stroke-width="2.3" fill="none"/>
+
+    <!-- ══════════ A19–A16 / S6–S3 ══════════ -->
+    <text x="103" y="148" text-anchor="end" font-size="10" fill="#0d1b2a">A₁₉-A₁₆/</text>
+    <text x="103" y="160" text-anchor="end" font-size="10" fill="#0d1b2a">S₆-S₃</text>
+
+    <line x1="88" y1="154" x2="108" y2="154" stroke="#0d1b2a" stroke-width="1.5"/>
+    <!-- T1: hex block A19-A16 = 0000 -->
+    <line x1="108" y1="143" x2="120" y2="154" stroke="#0d1b2a" stroke-width="1.5"/>
+    <line x1="108" y1="165" x2="120" y2="154" stroke="#0d1b2a" stroke-width="1.5"/>
+    <line x1="108" y1="143" x2="213" y2="143" stroke="#0d1b2a" stroke-width="1.5"/>
+    <line x1="108" y1="165" x2="213" y2="165" stroke="#0d1b2a" stroke-width="1.5"/>
+    <text x="160" y="157" text-anchor="middle" font-size="9" fill="#0d1b2a">A₁₉-A₁₆ = 0000</text>
+    <!-- transition T2 -->
+    <line x1="213" y1="143" x2="224" y2="154" stroke="#0d1b2a" stroke-width="1.5"/>
+    <line x1="213" y1="165" x2="224" y2="154" stroke="#0d1b2a" stroke-width="1.5"/>
+    <!-- Status S6-S3 through T2, TW1-TW3, T3, T4 -->
+    <line x1="224" y1="154" x2="673" y2="154" stroke="#0d1b2a" stroke-width="1.5"/>
+    <text x="448" y="150" text-anchor="middle" font-size="9" fill="#0d1b2a">S₆-S₃  (Status: BHE, IF, IO/M, Seg-reg info)</text>
+    <!-- end transition -->
+    <line x1="673" y1="154" x2="683" y2="143" stroke="#0d1b2a" stroke-width="1.5"/>
+    <line x1="673" y1="154" x2="683" y2="165" stroke="#0d1b2a" stroke-width="1.5"/>
+    <line x1="683" y1="143" x2="792" y2="143" stroke="#0d1b2a" stroke-width="1.5"/>
+    <line x1="683" y1="165" x2="792" y2="165" stroke="#0d1b2a" stroke-width="1.5"/>
+    <text x="737" y="157" text-anchor="middle" font-size="9" fill="#0d1b2a">S₇-S₃</text>
+
+    <!-- ══════════ AD15–AD0 ══════════ -->
+    <text x="103" y="212" text-anchor="end" font-size="10" fill="#e63946" font-weight="700">AD₁₅-AD₀</text>
+
+    <line x1="88" y1="208" x2="108" y2="208" stroke="#e63946" stroke-width="1.9"/>
+    <!-- T1: Address hex block -->
+    <line x1="108" y1="196" x2="120" y2="208" stroke="#e63946" stroke-width="1.9"/>
+    <line x1="108" y1="220" x2="120" y2="208" stroke="#e63946" stroke-width="1.9"/>
+    <line x1="108" y1="196" x2="213" y2="196" stroke="#e63946" stroke-width="1.9"/>
+    <line x1="108" y1="220" x2="213" y2="220" stroke="#e63946" stroke-width="1.9"/>
+    <text x="160" y="211" text-anchor="middle" font-size="9.5" fill="#e63946" font-weight="600">Port Addr: 1111h</text>
+
+    <!-- Address setup arrow -->
+    <line x1="120" y1="229" x2="218" y2="229" stroke="#555" stroke-width="1"/>
+    <polygon points="120,226 120,232 113,229" fill="#555"/>
+    <polygon points="218,226 218,232 225,229" fill="#555"/>
+    <text x="169" y="240" text-anchor="middle" font-size="8.5" fill="#555">Addr setup</text>
+
+    <!-- Transition T1→T2: float -->
+    <line x1="213" y1="196" x2="224" y2="208" stroke="#e63946" stroke-width="1.9"/>
+    <line x1="213" y1="220" x2="224" y2="208" stroke="#e63946" stroke-width="1.9"/>
+    <!-- Float T2 -->
+    <line x1="224" y1="208" x2="323" y2="208" stroke="#e63946" stroke-width="1.9"/>
+    <text x="273" y="204" text-anchor="middle" font-size="10" fill="#e63946">Float</text>
+
+    <!-- Transition T2→TW1: data begins -->
+    <line x1="323" y1="208" x2="335" y2="196" stroke="#e63946" stroke-width="1.9"/>
+    <line x1="323" y1="208" x2="335" y2="220" stroke="#e63946" stroke-width="1.9"/>
+    <!-- Data block: TW1 through T3 end -->
+    <line x1="335" y1="196" x2="673" y2="196" stroke="#e63946" stroke-width="1.9"/>
+    <line x1="335" y1="220" x2="673" y2="220" stroke="#e63946" stroke-width="1.9"/>
+    <text x="503" y="211" text-anchor="middle" font-size="9.5" fill="#e63946" font-weight="700">Data written to I/O port 1111h</text>
+
+    <!-- Data setup arrow -->
+    <line x1="342" y1="229" x2="678" y2="229" stroke="#555" stroke-width="1"/>
+    <polygon points="342,226 342,232 335,229" fill="#555"/>
+    <polygon points="678,226 678,232 685,229" fill="#555"/>
+    <text x="510" y="240" text-anchor="middle" font-size="8.5" fill="#555">Data stable through all 3 TW states</text>
+
+    <!-- Transition T4: float -->
+    <line x1="673" y1="196" x2="684" y2="208" stroke="#e63946" stroke-width="1.9"/>
+    <line x1="673" y1="220" x2="684" y2="208" stroke="#e63946" stroke-width="1.9"/>
+    <line x1="684" y1="208" x2="792" y2="208" stroke="#e63946" stroke-width="1.9"/>
+    <text x="738" y="204" text-anchor="middle" font-size="10" fill="#e63946">Float</text>
+
+    <!-- ══════════ M/IO̅ ══════════ -->
+    <text x="103" y="283" text-anchor="end" font-size="12" fill="#6b35c9" font-weight="600">M/IO̅</text>
+    <!-- I/O note box -->
+    <rect x="332" y="257" width="130" height="15" fill="#fff0f0" stroke="#e63946" stroke-width="0.9" rx="2"/>
+    <text x="397" y="268" text-anchor="middle" font-size="8.5" fill="#e63946" font-weight="700">LOW = I/O Operation</text>
+
+    <line x1="88" y1="280" x2="118" y2="280" stroke="#6b35c9" stroke-width="1.8"/>
+    <line x1="118" y1="280" x2="118" y2="295" stroke="#6b35c9" stroke-width="1.8"/>
+    <line x1="118" y1="295" x2="672" y2="295" stroke="#6b35c9" stroke-width="1.8"/>
+    <line x1="672" y1="295" x2="672" y2="280" stroke="#6b35c9" stroke-width="1.8"/>
+    <line x1="672" y1="280" x2="792" y2="280" stroke="#6b35c9" stroke-width="1.8"/>
+
+    <!-- ══════════ ALE ══════════ -->
+    <text x="103" y="330" text-anchor="end" font-size="12" fill="#6b35c9" font-weight="600">ALE</text>
+    <line x1="88" y1="333" x2="125" y2="333" stroke="#6b35c9" stroke-width="1.8"/>
+    <!-- ALE pulse during T1 -->
+    <line x1="125" y1="333" x2="125" y2="315" stroke="#6b35c9" stroke-width="1.8"/>
+    <line x1="125" y1="315" x2="205" y2="315" stroke="#6b35c9" stroke-width="1.8"/>
+    <line x1="205" y1="315" x2="205" y2="333" stroke="#6b35c9" stroke-width="1.8"/>
+    <line x1="205" y1="333" x2="792" y2="333" stroke="#6b35c9" stroke-width="1.8"/>
+    <text x="165" y="311" text-anchor="middle" font-size="8" fill="#6b35c9">Address latched</text>
+
+    <!-- ══════════ DT/R̅ ══════════ -->
+    <text x="103" y="369" text-anchor="end" font-size="12" fill="#6b35c9" font-weight="600">DT/R̅</text>
+    <!-- HIGH = transmit badge -->
+    <rect x="332" y="353" width="115" height="14" fill="#edf7ee" stroke="#2d6a4f" stroke-width="0.9" rx="2"/>
+    <text x="389" y="363" text-anchor="middle" font-size="8.5" fill="#2d6a4f" font-weight="700">HIGH = Transmit (WRITE)</text>
+
+    <line x1="88" y1="372" x2="118" y2="372" stroke="#6b35c9" stroke-width="1.8"/>
+    <line x1="118" y1="372" x2="118" y2="357" stroke="#6b35c9" stroke-width="1.8"/>
+    <line x1="118" y1="357" x2="672" y2="357" stroke="#6b35c9" stroke-width="1.8"/>
+    <line x1="672" y1="357" x2="672" y2="372" stroke="#6b35c9" stroke-width="1.8"/>
+    <line x1="672" y1="372" x2="792" y2="372" stroke="#6b35c9" stroke-width="1.8"/>
+
+    <!-- ══════════ WR̅ ══════════ -->
+    <text x="103" y="413" text-anchor="end" font-size="12" fill="#6b35c9" font-weight="600">WR̅</text>
+    <line x1="88" y1="406" x2="218" y2="406" stroke="#6b35c9" stroke-width="1.8"/>
+    <!-- WR goes LOW at T2 -->
+    <line x1="218" y1="406" x2="218" y2="424" stroke="#6b35c9" stroke-width="1.8"/>
+    <!-- stays LOW through TW1,TW2,TW3 and T3 -->
+    <line x1="218" y1="424" x2="672" y2="424" stroke="#6b35c9" stroke-width="1.8"/>
+    <!-- rises at trailing edge of T4 -->
+    <line x1="672" y1="424" x2="672" y2="406" stroke="#6b35c9" stroke-width="1.8"/>
+    <line x1="672" y1="406" x2="792" y2="406" stroke="#6b35c9" stroke-width="1.8"/>
+
+    <!-- Trailing edge arrow + note -->
+    <line x1="672" y1="427" x2="672" y2="447" stroke="#e63946" stroke-width="1.2" stroke-dasharray="3,2"/>
+    <text x="672" y="457" text-anchor="middle" font-size="8.5" fill="#e63946" font-weight="700">↑ Trailing edge of WR̅</text>
+    <text x="672" y="467" text-anchor="middle" font-size="8.5" fill="#e63946">Data committed to port</text>
+
+    <!-- ══════════ DEN̅ ══════════ -->
+    <text x="103" y="498" text-anchor="end" font-size="12" fill="#6b35c9" font-weight="600">DEN̅</text>
+    <line x1="88" y1="490" x2="210" y2="490" stroke="#6b35c9" stroke-width="1.8"/>
+    <!-- DEN goes LOW at T2 -->
+    <line x1="210" y1="490" x2="210" y2="507" stroke="#6b35c9" stroke-width="1.8"/>
+    <line x1="210" y1="507" x2="675" y2="507" stroke="#6b35c9" stroke-width="1.8"/>
+    <line x1="675" y1="507" x2="675" y2="490" stroke="#6b35c9" stroke-width="1.8"/>
+    <line x1="675" y1="490" x2="792" y2="490" stroke="#6b35c9" stroke-width="1.8"/>
+
+    <!-- ══════════ READY ══════════ -->
+    <text x="103" y="543" text-anchor="end" font-size="12" fill="#0d1b2a" font-weight="600">READY</text>
+    <!-- HIGH before TW, LOW during TW1-TW3, HIGH at T3 -->
+    <line x1="88" y1="537" x2="328" y2="537" stroke="#0d1b2a" stroke-width="1.8"/>
+    <line x1="328" y1="537" x2="328" y2="552" stroke="#0d1b2a" stroke-width="1.8"/>
+    <line x1="328" y1="552" x2="568" y2="552" stroke="#0d1b2a" stroke-width="1.8"/>
+    <line x1="568" y1="552" x2="568" y2="537" stroke="#0d1b2a" stroke-width="1.8"/>
+    <line x1="568" y1="537" x2="792" y2="537" stroke="#0d1b2a" stroke-width="1.8"/>
+    <!-- Ready labels -->
+    <text x="218" y="533" text-anchor="middle" font-size="8.5" fill="#2d6a4f">READY=HIGH</text>
+    <text x="448" y="548" text-anchor="middle" font-size="8.5" fill="#e63946" font-weight="700">READY = LOW (Wait states active)</text>
+    <text x="730" y="533" text-anchor="middle" font-size="8.5" fill="#2d6a4f">READY=HIGH</text>
+
+    <!-- READY sampled annotation at end of T2 -->
+    <line x1="328" y1="510" x2="328" y2="536" stroke="#0d1b2a" stroke-width="1" stroke-dasharray="3,2"/>
+    <text x="328" y="508" text-anchor="middle" font-size="7.5" fill="#0d1b2a">Sampled LOW</text>
+    <text x="328" y="499" text-anchor="middle" font-size="7.5" fill="#0d1b2a">@ end of T2</text>
+
+    <!-- ══════════ Row dividers ══════════ -->
+    <line x1="88" y1="130" x2="792" y2="130" stroke="#e8e4dc" stroke-width="0.6"/>
+    <line x1="88" y1="178" x2="792" y2="178" stroke="#e8e4dc" stroke-width="0.6"/>
+    <line x1="88" y1="252" x2="792" y2="252" stroke="#e8e4dc" stroke-width="0.6"/>
+    <line x1="88" y1="307" x2="792" y2="307" stroke="#e8e4dc" stroke-width="0.6"/>
+    <line x1="88" y1="347" x2="792" y2="347" stroke="#e8e4dc" stroke-width="0.6"/>
+    <line x1="88" y1="390" x2="792" y2="390" stroke="#e8e4dc" stroke-width="0.6"/>
+    <line x1="88" y1="477" x2="792" y2="477" stroke="#e8e4dc" stroke-width="0.6"/>
+    <line x1="88" y1="524" x2="792" y2="524" stroke="#e8e4dc" stroke-width="0.6"/>
+
+  </svg>
+
+  <p class="caption">Bus Timing for I/O Write Operation — 8086 @ 5 MHz — Port 1111h — 3 Wait States</p>
+
+  <div class="notes">
+    <div class="note">
+      <strong>① Port 1111h → I/O Write</strong>
+      M/IO̅ = <span class="red">LOW</span> throughout the entire bus cycle (I/O operation, not memory).
+      Port address <span class="red">1111h</span> appears on AD₁₅-AD₀ during T1.
+      A₁₉-A₁₆ = <span class="red">0000</span> since I/O only uses 16-bit addressing.
+    </div>
+    <div class="note">
+      <strong>② 3 Wait States (TW×3)</strong>
+      READY sampled <span class="red">LOW</span> at end of T2 → TW₁ inserted.
+      READY still LOW → TW₂, TW₃ inserted.
+      READY goes <span class="grn">HIGH</span> → T3 executes normally.
+      Total = 7 clocks = <span class="red">1400 ns</span> @ 5MHz.
+    </div>
+    <div class="note">
+      <strong>③ ALE — Address Latch Enable</strong>
+      Pulses <span class="grn">HIGH</span> during T1 only.
+      External latch (e.g. 8282) captures port address <span class="red">1111h</span> before AD₁₅-AD₀ switches to carry data in TW/T3.
+    </div>
+    <div class="note">
+      <strong>④ DT/R̅ = HIGH (Transmit)</strong>
+      CPU is sending data <span class="red">OUT</span> to port.
+      DT/R̅ stays <span class="grn">HIGH</span> from T1 through T4.
+      Directs 8286/8287 bus transceiver to pass data from CPU toward the I/O port.
+    </div>
+    <div class="note">
+      <strong>⑤ WR̅ — Write Control</strong>
+      Goes <span class="red">LOW</span> at T2, stays LOW through all 3 TW and T3.
+      The <span class="red">trailing edge (LOW→HIGH)</span> at end of T4 is the critical moment — data is officially committed and written to port <span class="red">1111h</span>.
+    </div>
+    <div class="note">
+      <strong>⑥ DEN̅ — Data Enable</strong>
+      Goes <span class="red">LOW</span> at T2 to enable the data bus transceiver.
+      Stays LOW through all wait states and T3.
+      Returns <span class="grn">HIGH</span> at T4 end — bus released for next cycle.
+    </div>
+  </div>
+
+  <p class="footer">CSE-4503: Microprocessors and Assembly Language &nbsp;|&nbsp; Islamic University of Technology (IUT)</p>
+</div>
+</body>
+</html>
