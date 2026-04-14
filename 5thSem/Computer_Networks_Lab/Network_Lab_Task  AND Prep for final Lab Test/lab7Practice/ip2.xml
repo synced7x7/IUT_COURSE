@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+
+    <!-- ===== ROUTER A INTERFACES ===== -->
+    <interface hosts="routerA" names="eth3" address="192.35.8.161" netmask="255.255.255.252"/>
+    <interface hosts="routerA" names="eth0" address="192.35.8.1"   netmask="255.255.255.192"/>
+    <interface hosts="routerA" names="eth1" address="192.35.8.145" netmask="255.255.255.240"/>
+    <interface hosts="routerA" names="eth2" address="192.35.8.97"  netmask="255.255.255.224"/>
+
+    <!-- ===== ROUTER B INTERFACES ===== -->
+    <interface hosts="routerB" names="eth2" address="192.35.8.162" netmask="255.255.255.252"/>
+    <interface hosts="routerB" names="eth0" address="192.35.8.65"  netmask="255.255.255.224"/>
+    <interface hosts="routerB" names="eth1" address="192.35.8.129" netmask="255.255.255.240"/>
+
+    <!-- ===== HOST INTERFACES ===== -->
+    <interface hosts="engHostA"  address="192.35.8.2" netmask="255.255.255.192"/>
+    <interface hosts="engHostB"  address="192.35.8.3" netmask="255.255.255.192"/>
+    <interface hosts="engHostC"  address="192.35.8.4" netmask="255.255.255.192"/>
+
+    <interface hosts="marketingHostA" address="192.35.8.146" netmask="255.255.255.240"/>
+    <interface hosts="marketingHostB" address="192.35.8.147" netmask="255.255.255.240"/>
+    <interface hosts="marketingHostC" address="192.35.8.148" netmask="255.255.255.240"/>
+
+    <interface hosts="salesHostA" address="192.35.8.98"  netmask="255.255.255.224"/>
+    <interface hosts="salesHostB" address="192.35.8.99"  netmask="255.255.255.224"/>
+    <interface hosts="salesHostC" address="192.35.8.100" netmask="255.255.255.224"/>
+
+    <interface hosts="mgmtHostA" address="192.35.8.66" netmask="255.255.255.224"/>
+    <interface hosts="mgmtHostB" address="192.35.8.67" netmask="255.255.255.224"/>
+    <interface hosts="mgmtHostC" address="192.35.8.68" netmask="255.255.255.224"/>
+
+    <interface hosts="adminHostA" address="192.35.8.130" netmask="255.255.255.240"/>
+    <interface hosts="adminHostB" address="192.35.8.131" netmask="255.255.255.240"/>
+    <interface hosts="adminHostC" address="192.35.8.132" netmask="255.255.255.240"/>
+
+    <!-- ===== STATIC ROUTES — ROUTERS ===== -->
+    <!-- Router A: reach Router B's networks (Mgmt + Admin) via RouterB's link IP -->
+    <route hosts="routerA" destination="192.35.8.64"  netmask="255.255.255.224" gateway="192.35.8.162"/>
+    <route hosts="routerA" destination="192.35.8.128" netmask="255.255.255.240" gateway="192.35.8.162"/>
+
+    <!-- Router B: reach Router A's networks (Eng + Marketing + Sales) via RouterA's link IP -->
+    <route hosts="routerB" destination="192.35.8.0"   netmask="255.255.255.192" gateway="192.35.8.161"/>
+    <route hosts="routerB" destination="192.35.8.144" netmask="255.255.255.240" gateway="192.35.8.161"/>
+    <route hosts="routerB" destination="192.35.8.96"  netmask="255.255.255.224" gateway="192.35.8.161"/>
+
+    <!-- ===== DEFAULT GATEWAY ROUTES — HOSTS ===== -->
+    <route hosts="engHost*"       destination="0.0.0.0" netmask="0.0.0.0" gateway="192.35.8.1"/>
+    <route hosts="marketingHost*" destination="0.0.0.0" netmask="0.0.0.0" gateway="192.35.8.145"/>
+    <route hosts="salesHost*"     destination="0.0.0.0" netmask="0.0.0.0" gateway="192.35.8.97"/>
+    <route hosts="mgmtHost*"      destination="0.0.0.0" netmask="0.0.0.0" gateway="192.35.8.65"/>
+    <route hosts="adminHost*"     destination="0.0.0.0" netmask="0.0.0.0" gateway="192.35.8.129"/>
+
+</config>

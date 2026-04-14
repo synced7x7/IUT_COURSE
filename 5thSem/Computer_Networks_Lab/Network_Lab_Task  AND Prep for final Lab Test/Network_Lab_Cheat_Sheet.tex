@@ -1,0 +1,975 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=0.7in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{inconsolata}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{titlesec}
+\usepackage{longtable}
+
+\definecolor{codebg}{RGB}{248,248,248}
+\definecolor{codeframe}{RGB}{220,220,220}
+\definecolor{codetitle}{RGB}{25,63,108}
+
+\lstdefinestyle{labcode}{
+  basicstyle=\ttfamily\small,
+  backgroundcolor=\color{codebg},
+  frame=single,
+  rulecolor=\color{codeframe},
+  frameround=tttt,
+  breaklines=true,
+  breakatwhitespace=false,
+  columns=fullflexible,
+  keepspaces=true,
+  showstringspaces=false,
+  tabsize=4,
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  numbersep=8pt,
+  xleftmargin=8pt,
+  xrightmargin=8pt
+}
+
+\titleformat{\section}{\Large\bfseries\color{codetitle}}{\thesection}{0.5em}{}
+\titleformat{\subsection}{\large\bfseries}{\thesubsection}{0.5em}{}
+
+\title{Network Lab Final Cheat Sheet\\\large Complete Source Dump (All Attached Folders)}
+\author{}
+\date{\today}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\vspace{0.5em}
+
+\section{Folder: Lab6}
+
+\subsection*{Lab06Network.ned}
+\begin{lstlisting}[style=labcode]
+package lab06_network;
+
+import inet.node.ethernet.Eth100M;
+import inet.node.ethernet.EthernetSwitch;
+import inet.node.inet.StandardHost;
+import inet.networklayer.configurator.ipv4.Ipv4NetworkConfigurator;
+
+network Lab06Network
+{
+    @display("bgb=916,555");
+    submodules:
+        configurator: Ipv4NetworkConfigurator {
+            @display("p=50,50");
+        }
+        // Lab 1
+        lab1_hostA: StandardHost {
+            @display("p=100,100");
+        }
+        lab1_hostB: StandardHost {
+            @display("p=100,200");
+        }
+        lab1_switch: EthernetSwitch {
+            @display("p=200,150");
+        }
+
+        // Lab 2
+        lab2_hostA: StandardHost {
+            @display("p=300,100");
+        }
+        lab2_hostB: StandardHost {
+            @display("p=381,54");
+        }
+        lab2_switch: EthernetSwitch {
+            @display("p=336,161");
+        }
+
+        // Lab 3
+        lab3_hostA: StandardHost {
+            @display("p=500,100");
+        }
+        lab3_hostB: StandardHost {
+            @display("p=584,53");
+        }
+        lab3_switch: EthernetSwitch {
+            @display("p=489,161");
+        }
+
+        // Lab 4
+        lab4_hostA: StandardHost {
+            @display("p=700,100");
+        }
+        lab4_hostB: StandardHost {
+            @display("p=866,99");
+        }
+        lab4_switch: EthernetSwitch {
+            @display("p=737,216");
+        }
+
+        // Lab 5
+        lab5_hostA: StandardHost {
+            @display("p=599,358");
+        }
+        lab5_hostB: StandardHost {
+            @display("p=610,437");
+        }
+        lab5_switch: EthernetSwitch {
+            @display("p=500,400");
+        }
+
+        // Core switch to connect all labs
+        coreSwitch: EthernetSwitch {
+            @display("p=164,357");
+        }
+
+    connections:
+        // Lab 1
+        lab1_hostA.ethg++ <--> Eth100M <--> lab1_switch.ethg++;
+        lab1_hostB.ethg++ <--> Eth100M <--> lab1_switch.ethg++;
+        lab1_switch.ethg++ <--> Eth100M <--> coreSwitch.ethg++;
+
+        // Lab 2
+        lab2_hostA.ethg++ <--> Eth100M <--> lab2_switch.ethg++;
+        lab2_hostB.ethg++ <--> Eth100M <--> lab2_switch.ethg++;
+        lab2_switch.ethg++ <--> Eth100M <--> coreSwitch.ethg++;
+
+        // Lab 3
+        lab3_hostA.ethg++ <--> Eth100M <--> lab3_switch.ethg++;
+        lab3_hostB.ethg++ <--> Eth100M <--> lab3_switch.ethg++;
+        lab3_switch.ethg++ <--> Eth100M <--> coreSwitch.ethg++;
+
+        // Lab 4
+        lab4_hostA.ethg++ <--> Eth100M <--> lab4_switch.ethg++;
+        lab4_hostB.ethg++ <--> Eth100M <--> lab4_switch.ethg++;
+        lab4_switch.ethg++ <--> Eth100M <--> coreSwitch.ethg++;
+
+        // Lab 5
+        lab5_hostA.ethg++ <--> Eth100M <--> lab5_switch.ethg++;
+        lab5_hostB.ethg++ <--> Eth100M <--> lab5_switch.ethg++;
+        lab5_switch.ethg++ <--> Eth100M <--> coreSwitch.ethg++;
+}
+\end{lstlisting}
+
+\subsection*{omnetpp.ini}
+\begin{lstlisting}[style=labcode]
+[General]
+network = Lab06Network
+sim-time-limit = 15s
+
+
+*.lab*_host*.numApps = 1
+*.lab*_host*.app[0].typename = "PingApp"
+*.lab*_host*.app[0].packetSize = 500B
+*.lab*_host*.app[0].sendInterval = 1s
+
+*.*.ipv4.arp.typename = "GlobalArp"
+
+
+*.lab1_hostA.app[0].destAddr = "lab1_hostB"
+*.lab2_hostA.app[0].destAddr = "lab2_hostB"
+*.lab3_hostA.app[0].destAddr = "lab3_hostB"
+*.lab4_hostA.app[0].destAddr = "lab4_hostB"
+*.lab5_hostA.app[0].destAddr = "lab5_hostB"
+\end{lstlisting}
+
+\section{Folder: Lab6Practice}
+
+\subsection*{lab6.ned}
+\begin{lstlisting}[style=labcode]
+package lab6practice;
+
+import inet.networklayer.configurator.ipv4.Ipv4NetworkConfigurator;
+import inet.node.ethernet.EthernetSwitch;
+import inet.node.inet.StandardHost;
+import inet.node.ethernet.Eth100M;
+import ned.IdealChannel;
+
+
+network lab6Network
+{
+    @display("bgb=1171,573");
+    submodules:
+        configurator: Ipv4NetworkConfigurator {
+            @display("p=96,76");
+        }
+        lab1HostA: StandardHost {
+            @display("p=637,62");
+        }
+        lab1HostB: StandardHost {
+            @display("p=803,84");
+        }
+        lab2HostA: StandardHost {
+            @display("p=1042,185");
+        }
+        lab2HostB: StandardHost {
+            @display("p=1049,282");
+        }
+        lab3HostA: StandardHost {
+            @display("p=628,507");
+        }
+        lab3HostB: StandardHost {
+            @display("p=488,515");
+        }
+        lab4HostB: StandardHost {
+            @display("p=130,298");
+        }
+        lab4HostA: StandardHost {
+            @display("p=145,394");
+        }
+        lab5HostB: StandardHost {
+            @display("p=278,119");
+        }
+        lab5HostA: StandardHost {
+            @display("p=457,62");
+        }
+        lab5Switch: EthernetSwitch {
+            @display("p=400,165");
+        }
+        lab1Switch: EthernetSwitch {
+            @display("p=659,152");
+        }
+        lab2Switch: EthernetSwitch {
+            @display("p=862,281");
+        }
+        lab3Switch: EthernetSwitch {
+            @display("p=527,433");
+        }
+        lab4Switch: EthernetSwitch {
+            @display("p=266,350");
+        }
+        coreSwitch: EthernetSwitch {
+            @display("p=581,291");
+        }
+    connections:
+        lab5HostB.ethg++ <--> Eth100M <--> lab5Switch.ethg++;
+        lab5HostA.ethg++ <--> Eth100M <--> lab5Switch.ethg++;
+        lab1HostA.ethg++ <--> Eth100M <--> lab1Switch.ethg++;
+        lab1HostB.ethg++ <--> Eth100M <--> lab1Switch.ethg++;
+        lab2HostA.ethg++ <--> Eth100M <--> lab2Switch.ethg++;
+        lab2Switch.ethg++ <--> Eth100M <--> lab2HostB.ethg++;
+        lab3Switch.ethg++ <--> Eth100M <--> lab3HostB.ethg++;
+        lab3Switch.ethg++ <--> Eth100M <--> lab3HostA.ethg++;
+        lab4Switch.ethg++ <--> Eth100M <--> lab4HostA.ethg++;
+        lab4HostB.ethg++ <--> Eth100M <--> lab4Switch.ethg++;
+        lab4Switch.ethg++ <--> Eth100M <--> coreSwitch.ethg++;
+        lab5Switch.ethg++ <--> Eth100M <--> coreSwitch.ethg++;
+        lab1Switch.ethg++ <--> Eth100M <--> coreSwitch.ethg++;
+        lab2Switch.ethg++ <--> Eth100M <--> coreSwitch.ethg++;
+        lab3Switch.ethg++ <--> Eth100M <--> coreSwitch.ethg++;
+}
+\end{lstlisting}
+
+\subsection*{omnetpp.ini}
+\begin{lstlisting}[style=labcode]
+[General]
+network = lab6Network
+sim-time-limit = 15s
+
+
+*.lab1HostA.numApps = 3
+
+*.lab1HostA.app[0].typename = "PingApp"
+*.lab1HostA.app[0].destAddr = "lab2HostB"
+*.lab1HostA.app[0].packetSize = 500B
+*.lab1HostA.app[0].sendInterval = 1s
+
+*.lab1HostA.app[1].typename = "PingApp"
+*.lab1HostA.app[1].destAddr = "lab3HostB"
+*.lab1HostA.app[1].packetSize = 500B
+*.lab1HostA.app[1].sendInterval = 1s
+
+*.lab1HostA.app[2].typename = "PingApp"
+*.lab1HostA.app[2].destAddr = "lab4HostB"
+*.lab1HostA.app[2].packetSize = 500B
+*.lab1HostA.app[2].sendInterval = 1s
+\end{lstlisting}
+
+\subsection*{package.ned}
+\begin{lstlisting}[style=labcode]
+package lab6practice;
+
+@license(LGPL);
+\end{lstlisting}
+
+\section{Folder: Lab7Network}
+
+\subsection*{ip.xml}
+\begin{lstlisting}[style=labcode]
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<!-- engineer -->
+	<interface hosts="centralRouter" names="eth0" address="192.35.8.1" netmask="255.255.255.192"/>
+<!-- 	Market -->
+	<interface hosts="centralRouter" names="eth1" address="192.35.8.129" netmask="255.255.255.240"/>
+<!-- 	Sales -->
+	<interface hosts="centralRouter" names="eth2" address="192.35.8.97" netmask="255.255.255.240"/>
+<!--  	Admin -->
+ 	<interface hosts="centralRouter" names="eth3" address="192.35.8.113" netmask="255.255.255.240"/>
+<!-- 	Management -->
+	<interface hosts="centralRouter" names="eth4" address="192.35.8.65" netmask="255.255.255.224"/>
+
+<interface hosts="engHost1" address="192.35.8.10" netmask="255.255.255.192"/>
+    <interface hosts="engHost2" address="192.35.8.11" netmask="255.255.255.192"/>
+    <interface hosts="engHost3" address="192.35.8.12" netmask="255.255.255.192"/>
+    
+    
+   <interface hosts="mktHost1" address="192.35.8.130" netmask="255.255.255.240"/>
+    <interface hosts="mktHost2" address="192.35.8.131" netmask="255.255.255.240"/>
+    <interface hosts="mktHost3" address="192.35.8.132" netmask="255.255.255.240"/>
+    
+       
+ <interface hosts="salesHost1" address="192.35.8.98" netmask="255.255.255.240"/>
+    <interface hosts="salesHost2" address="192.35.8.99" netmask="255.255.255.240"/>
+    <interface hosts="salesHost3" address="192.35.8.100" netmask="255.255.255.240"/>
+
+
+  <interface hosts="adminHost1" address="192.35.8.114" netmask="255.255.255.240"/>
+    <interface hosts="adminHost2" address="192.35.8.115" netmask="255.255.255.240"/>
+    <interface hosts="adminHost3" address="192.35.8.116" netmask="255.255.255.240"/>
+    
+      <interface hosts="mgmtHost1" address="192.35.8.66" netmask="255.255.255.224"/>
+    <interface hosts="mgmtHost2" address="192.35.8.67" netmask="255.255.255.224"/>
+    <interface hosts="mgmtHost3" address="192.35.8.68" netmask="255.255.255.224"/>
+
+
+	<route hosts="centralRouter" destination="192.35.8.0" netmask="255.255.255.192" interface="eth0"/>
+    <route hosts="centralRouter" destination="192.35.8.128" netmask="255.255.255.240"   interface="eth1"/>
+    <route hosts="centralRouter" destination="192.35.8.96" netmask="255.255.255.240" interface="eth2"/>
+    <route hosts="centralRouter" destination="192.35.8.112" netmask="255.255.255.240" interface="eth3"/>
+    <route hosts="centralRouter" destination="192.35.8.64" netmask="255.255.255.224"  interface="eth4"/>
+
+	<route hosts="engHost*" destination="*" netmask="*" gateway="192.35.8.1"/>
+    <route hosts="mktHost*" destination="*" netmask="*" gateway="192.35.8.129"/>
+    <route hosts="salesHost*" destination="*" netmask="*" gateway="192.35.8.97"/>
+    <route hosts="adminHost*" destination="*" netmask="*" gateway="192.35.8.113"/>
+    <route hosts="mgmtHost*" destination="*" netmask="*" gateway="192.35.8.65"/>
+
+
+</config>
+\end{lstlisting}
+
+\subsection*{Lab07Network.ned}
+\begin{lstlisting}[style=labcode]
+package lab07network;
+
+import inet.node.ethernet.Eth100M;
+import inet.node.ethernet.EthernetSwitch;
+import inet.node.inet.StandardHost;
+import inet.node.inet.Router;
+import inet.networklayer.configurator.ipv4.Ipv4NetworkConfigurator;
+
+network Lab07Network
+{
+    @display("bgb=1200,800");
+
+    submodules:
+        configurator: Ipv4NetworkConfigurator {
+            @display("p=50,50");
+            addStaticRoutes = false;
+        }
+
+        centralRouter: Router {
+            @display("p=600,343;i=abstract/router");
+        }
+
+        engSwitch: EthernetSwitch {
+            @display("p=300,200");
+        }
+        engHost1: StandardHost {
+            @display("p=127,190");
+        }
+        engHost2: StandardHost {
+            @display("p=236,100");
+        }
+        engHost3: StandardHost {
+            @display("p=489,137");
+        }
+
+        mktSwitch: EthernetSwitch {
+            @display("p=900,200");
+        }
+        mktHost1: StandardHost {
+            @display("p=743,50");
+        }
+        mktHost2: StandardHost {
+            @display("p=941,50");
+        }
+        mktHost3: StandardHost {
+            @display("p=1098,127");
+        }
+
+
+        salesSwitch: EthernetSwitch {
+            @display("p=200,500");
+        }
+        salesHost1: StandardHost {
+            @display("p=80,535");
+        }
+        salesHost2: StandardHost {
+            @display("p=248,622");
+        }
+        salesHost3: StandardHost {
+            @display("p=362,537");
+        }
+
+        adminSwitch: EthernetSwitch {
+            @display("p=600,600");
+        }
+        adminHost1: StandardHost {
+            @display("p=442,711");
+        }
+        adminHost2: StandardHost {
+            @display("p=743,722");
+        }
+        adminHost3: StandardHost {
+            @display("p=756,590");
+        }
+
+
+        mgmtSwitch: EthernetSwitch {
+            @display("p=899,397");
+        }
+        mgmtHost1: StandardHost {
+            @display("p=986,561");
+        }
+        mgmtHost2: StandardHost {
+            @display("p=1121,500");
+        }
+        mgmtHost3: StandardHost {
+            @display("p=1089,343");
+        }
+
+    connections:
+
+        engHost1.ethg++ <--> Eth100M <--> engSwitch.ethg++;
+        engHost2.ethg++ <--> Eth100M <--> engSwitch.ethg++;
+        engHost3.ethg++ <--> Eth100M <--> engSwitch.ethg++;
+        engSwitch.ethg++ <--> Eth100M <--> centralRouter.ethg++;
+        mktHost1.ethg++ <--> Eth100M <--> mktSwitch.ethg++;
+        mktHost2.ethg++ <--> Eth100M <--> mktSwitch.ethg++;
+        mktHost3.ethg++ <--> Eth100M <--> mktSwitch.ethg++;
+        mktSwitch.ethg++ <--> Eth100M <--> centralRouter.ethg++;
+        salesHost1.ethg++ <--> Eth100M <--> salesSwitch.ethg++;
+        salesHost2.ethg++ <--> Eth100M <--> salesSwitch.ethg++;
+        salesHost3.ethg++ <--> Eth100M <--> salesSwitch.ethg++;
+        salesSwitch.ethg++ <--> Eth100M <--> centralRouter.ethg++;
+        adminHost1.ethg++ <--> Eth100M <--> adminSwitch.ethg++;
+        adminHost2.ethg++ <--> Eth100M <--> adminSwitch.ethg++;
+        adminHost3.ethg++ <--> Eth100M <--> adminSwitch.ethg++;
+        adminSwitch.ethg++ <--> Eth100M <--> centralRouter.ethg++;
+        mgmtHost1.ethg++ <--> Eth100M <--> mgmtSwitch.ethg++;
+        mgmtHost2.ethg++ <--> Eth100M <--> mgmtSwitch.ethg++;
+        mgmtHost3.ethg++ <--> Eth100M <--> mgmtSwitch.ethg++;
+        mgmtSwitch.ethg++ <--> Eth100M <--> centralRouter.ethg++;
+}
+\end{lstlisting}
+
+\subsection*{omnetpp.ini}
+\begin{lstlisting}[style=labcode]
+[General]
+network = Lab07Network
+sim-time-limit = 30s
+
+*.configurator.config = xmldoc("ip.xml")
+*.configurator.assignAdress = true
+*.configurator.assignRoutes = false
+*.configurator.addStaticRoutes = false
+*.configurator.addDefaultRoutes = false
+
+*.engHost1.numApps = 1
+*.engHost1.app[0].typename = "PingApp"
+*.engHost1.app[0].destAddr = "mgmtHost2"
+\end{lstlisting}
+
+\section{Folder: lab7Practice}
+
+\subsection*{ip2.xml}
+\begin{lstlisting}[style=labcode]
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+
+    <!-- ===== ROUTER A INTERFACES ===== -->
+    <interface hosts="routerA" names="eth3" address="192.35.8.161" netmask="255.255.255.252"/>
+    <interface hosts="routerA" names="eth0" address="192.35.8.1"   netmask="255.255.255.192"/>
+    <interface hosts="routerA" names="eth1" address="192.35.8.145" netmask="255.255.255.240"/>
+    <interface hosts="routerA" names="eth2" address="192.35.8.97"  netmask="255.255.255.224"/>
+
+    <!-- ===== ROUTER B INTERFACES ===== -->
+    <interface hosts="routerB" names="eth2" address="192.35.8.162" netmask="255.255.255.252"/>
+    <interface hosts="routerB" names="eth0" address="192.35.8.65"  netmask="255.255.255.224"/>
+    <interface hosts="routerB" names="eth1" address="192.35.8.129" netmask="255.255.255.240"/>
+
+    <!-- ===== HOST INTERFACES ===== -->
+    <interface hosts="engHostA"  address="192.35.8.2" netmask="255.255.255.192"/>
+    <interface hosts="engHostB"  address="192.35.8.3" netmask="255.255.255.192"/>
+    <interface hosts="engHostC"  address="192.35.8.4" netmask="255.255.255.192"/>
+
+    <interface hosts="marketingHostA" address="192.35.8.146" netmask="255.255.255.240"/>
+    <interface hosts="marketingHostB" address="192.35.8.147" netmask="255.255.255.240"/>
+    <interface hosts="marketingHostC" address="192.35.8.148" netmask="255.255.255.240"/>
+
+    <interface hosts="salesHostA" address="192.35.8.98"  netmask="255.255.255.224"/>
+    <interface hosts="salesHostB" address="192.35.8.99"  netmask="255.255.255.224"/>
+    <interface hosts="salesHostC" address="192.35.8.100" netmask="255.255.255.224"/>
+
+    <interface hosts="mgmtHostA" address="192.35.8.66" netmask="255.255.255.224"/>
+    <interface hosts="mgmtHostB" address="192.35.8.67" netmask="255.255.255.224"/>
+    <interface hosts="mgmtHostC" address="192.35.8.68" netmask="255.255.255.224"/>
+
+    <interface hosts="adminHostA" address="192.35.8.130" netmask="255.255.255.240"/>
+    <interface hosts="adminHostB" address="192.35.8.131" netmask="255.255.255.240"/>
+    <interface hosts="adminHostC" address="192.35.8.132" netmask="255.255.255.240"/>
+
+    <!-- ===== STATIC ROUTES  ROUTERS ===== -->
+    <!-- Router A: reach Router B's networks (Mgmt + Admin) via RouterB's link IP -->
+    <route hosts="routerA" destination="192.35.8.64"  netmask="255.255.255.224" gateway="192.35.8.162"/>
+    <route hosts="routerA" destination="192.35.8.128" netmask="255.255.255.240" gateway="192.35.8.162"/>
+
+    <!-- Router B: reach Router A's networks (Eng + Marketing + Sales) via RouterA's link IP -->
+    <route hosts="routerB" destination="192.35.8.0"   netmask="255.255.255.192" gateway="192.35.8.161"/>
+    <route hosts="routerB" destination="192.35.8.144" netmask="255.255.255.240" gateway="192.35.8.161"/>
+    <route hosts="routerB" destination="192.35.8.96"  netmask="255.255.255.224" gateway="192.35.8.161"/>
+
+    <!-- ===== DEFAULT GATEWAY ROUTES  HOSTS ===== -->
+    <route hosts="engHost*"       destination="0.0.0.0" netmask="0.0.0.0" gateway="192.35.8.1"/>
+    <route hosts="marketingHost*" destination="0.0.0.0" netmask="0.0.0.0" gateway="192.35.8.145"/>
+    <route hosts="salesHost*"     destination="0.0.0.0" netmask="0.0.0.0" gateway="192.35.8.97"/>
+    <route hosts="mgmtHost*"      destination="0.0.0.0" netmask="0.0.0.0" gateway="192.35.8.65"/>
+    <route hosts="adminHost*"     destination="0.0.0.0" netmask="0.0.0.0" gateway="192.35.8.129"/>
+
+</config>
+\end{lstlisting}
+
+\subsection*{lab7.ned}
+\begin{lstlisting}[style=labcode]
+package lab7practice;
+
+import inet.node.ethernet.EthernetSwitch;
+import inet.node.inet.StandardHost;
+import inet.node.inet.Router;
+import inet.node.ethernet.Eth100M;
+import inet.networklayer.configurator.ipv4.Ipv4NetworkConfigurator;
+
+network lab7Network
+{
+    @display("bgb=1200,700");
+
+    submodules:
+		configurator: Ipv4NetworkConfigurator {
+        	@display("p=80,50");
+    	}
+
+        // ===== ROUTERS =====
+        routerA: Router {
+            @display("p=450,320");
+        }
+        routerB: Router {
+            @display("p=750,320");
+        }
+
+        // ===== ENGINEERING SUBNET (Router A) =====
+        engSwitch: EthernetSwitch {
+            @display("p=200,150");
+        }
+        engHostA: StandardHost {
+            @display("p=80,80");
+        }
+        engHostB: StandardHost {
+            @display("p=200,60");
+        }
+        engHostC: StandardHost {
+            @display("p=320,80");
+        }
+
+        // ===== MARKETING SUBNET (Router A) =====
+        marketingSwitch: EthernetSwitch {
+            @display("p=200,480");
+        }
+        marketingHostA: StandardHost {
+            @display("p=80,560");
+        }
+        marketingHostB: StandardHost {
+            @display("p=200,600");
+        }
+        marketingHostC: StandardHost {
+            @display("p=320,560");
+        }
+
+        // ===== SALES SUBNET (Router A) =====
+        salesSwitch: EthernetSwitch {
+            @display("p=572,537");
+        }
+        salesHostA: StandardHost {
+            @display("p=486,619");
+        }
+        salesHostB: StandardHost {
+            @display("p=617,658");
+        }
+        salesHostC: StandardHost {
+            @display("p=691,629");
+        }
+
+        // ===== MANAGEMENT SUBNET (Router B) =====
+        mgmtSwitch: EthernetSwitch {
+            @display("p=1000,150");
+        }
+        mgmtHostA: StandardHost {
+            @display("p=880,80");
+        }
+        mgmtHostB: StandardHost {
+            @display("p=1000,60");
+        }
+        mgmtHostC: StandardHost {
+            @display("p=1120,80");
+        }
+
+        // ===== ADMINISTRATION SUBNET (Router B) =====
+        adminSwitch: EthernetSwitch {
+            @display("p=1000,480");
+        }
+        adminHostA: StandardHost {
+            @display("p=880,560");
+        }
+        adminHostB: StandardHost {
+            @display("p=1000,600");
+        }
+        adminHostC: StandardHost {
+            @display("p=1120,560");
+        }
+
+    connections:
+
+        // ===== ROUTER A <--> ROUTER B (point-to-point link) =====
+
+
+        // ===== ROUTER A <--> ENGINEERING SWITCH =====
+        routerA.ethg++ <--> Eth100M <--> engSwitch.ethg++;
+        engHostA.ethg++ <--> Eth100M <--> engSwitch.ethg++;
+        engHostB.ethg++ <--> Eth100M <--> engSwitch.ethg++;
+        engHostC.ethg++ <--> Eth100M <--> engSwitch.ethg++;
+
+        // ===== ROUTER A <--> MARKETING SWITCH =====
+        routerA.ethg++ <--> Eth100M <--> marketingSwitch.ethg++;
+        marketingHostA.ethg++ <--> Eth100M <--> marketingSwitch.ethg++;
+        marketingHostB.ethg++ <--> Eth100M <--> marketingSwitch.ethg++;
+        marketingHostC.ethg++ <--> Eth100M <--> marketingSwitch.ethg++;
+
+        // ===== ROUTER A <--> SALES SWITCH =====
+        routerA.ethg++ <--> Eth100M <--> salesSwitch.ethg++;
+        salesHostA.ethg++ <--> Eth100M <--> salesSwitch.ethg++;
+        salesHostB.ethg++ <--> Eth100M <--> salesSwitch.ethg++;
+        salesHostC.ethg++ <--> Eth100M <--> salesSwitch.ethg++;
+
+        // ===== ROUTER B <--> MANAGEMENT SWITCH =====
+        routerB.ethg++ <--> Eth100M <--> mgmtSwitch.ethg++;
+        mgmtHostA.ethg++ <--> Eth100M <--> mgmtSwitch.ethg++;
+        mgmtHostB.ethg++ <--> Eth100M <--> mgmtSwitch.ethg++;
+        mgmtHostC.ethg++ <--> Eth100M <--> mgmtSwitch.ethg++;
+
+        // ===== ROUTER B <--> ADMINISTRATION SWITCH =====
+        routerB.ethg++ <--> Eth100M <--> adminSwitch.ethg++;
+        adminHostA.ethg++ <--> Eth100M <--> adminSwitch.ethg++;
+        adminHostB.ethg++ <--> Eth100M <--> adminSwitch.ethg++;
+        adminHostC.ethg++ <--> Eth100M <--> adminSwitch.ethg++;
+
+        routerA.ethg++ <--> Eth100M <--> routerB.ethg++;
+}
+\end{lstlisting}
+
+\subsection*{omnetpp.ini}
+\begin{lstlisting}[style=labcode]
+[General]
+network = lab7Network
+sim-time-limit = 15s
+
+# ===== CONFIGURATOR  address assignment only, NO auto routing =====
+*.configurator.config = xmldoc("ip2.xml")
+*.configurator.assignAddresses = true
+*.configurator.addStaticRoutes = false
+*.configurator.addDefaultRoutes = false
+*.configurator.addSubnetRoutes = false
+
+
+# ===== PING APPS  every HostA pings across the network =====
+
+# Engineering HostA  pings Management and Admin (cross-router test)
+*.engHostA.numApps = 2
+*.engHostA.app[0].typename = "PingApp"
+*.engHostA.app[0].destAddr = "salesHostA"
+*.engHostA.app[0].packetSize = 500B
+*.engHostA.app[0].sendInterval = 1s
+
+*.engHostA.app[1].typename = "PingApp"
+*.engHostA.app[1].destAddr = "adminHostA"
+*.engHostA.app[1].packetSize = 500B
+*.engHostA.app[1].sendInterval = 1s
+
+# Marketing HostA  pings Sales HostA (same router)
+*.marketingHostA.numApps = 1
+*.marketingHostA.app[0].typename = "PingApp"
+*.marketingHostA.app[0].destAddr = "salesHostA"
+*.marketingHostA.app[0].packetSize = 500B
+*.marketingHostA.app[0].sendInterval = 1s
+
+# Sales HostA  pings Admin HostA (cross-router test)
+*.salesHostA.numApps = 1
+*.salesHostA.app[0].typename = "PingApp"
+*.salesHostA.app[0].destAddr = "adminHostA"
+*.salesHostA.app[0].packetSize = 500B
+*.salesHostA.app[0].sendInterval = 1s
+
+# Management HostA  pings Engineering HostA (cross-router test)
+*.mgmtHostA.numApps = 1
+*.mgmtHostA.app[0].typename = "PingApp"
+*.mgmtHostA.app[0].destAddr = "engHostA"
+*.mgmtHostA.app[0].packetSize = 500B
+*.mgmtHostA.app[0].sendInterval = 1s
+
+# Admin HostA  pings Marketing HostA (cross-router test)
+*.adminHostA.numApps = 1
+*.adminHostA.app[0].typename = "PingApp"
+*.adminHostA.app[0].destAddr = "marketingHostA"
+*.adminHostA.app[0].packetSize = 500B
+*.adminHostA.app[0].sendInterval = 1s
+\end{lstlisting}
+
+\section{Folder: socketProg\_lab2}
+
+\subsection*{TCP\_frame\_client.py}
+\begin{lstlisting}[style=labcode]
+import socket
+import struct
+import sys
+
+# Use command-line argument if provided
+HOST = sys.argv[1] if len(sys.argv) > 1 else '127.0.0.1'
+PORT = 7007
+
+# Create TCP socket
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+# Connect to server
+client.connect((HOST, PORT))
+
+for msg in ["hello", "this is a longer message", "bye"]:
+    # Convert string to bytes
+    data = msg.encode()
+
+    # Send: 4-byte length prefix + actual data
+    client.sendall(struct.pack('!I', len(data)) + data)
+
+    # Receive 4-byte response header
+    hdr = client.recv(4)
+    if not hdr:
+        print("Server closed")
+        break
+
+    # Extract message length
+    (length,) = struct.unpack('!I', hdr)
+
+    # Receive full response payload
+    resp = b''
+    while len(resp) < length:
+        chunk = client.recv(length - len(resp))
+        if not chunk:
+            break
+        resp += chunk
+
+    print("Echo:", resp.decode())
+
+client.close()
+\end{lstlisting}
+
+\subsection*{TCP\_frame\_server.py}
+\begin{lstlisting}[style=labcode]
+import socket
+import struct
+
+# Listen on all network interfaces
+HOST = '10.170.232.240'
+PORT = 7007
+
+
+def recv_all(sock, n):
+    """
+    Receive exactly n bytes from the socket.
+    TCP does not guarantee that recv(n) returns n bytes,
+    so we must loop until all bytes are received.
+    """
+    data = b''
+    while len(data) < n:
+        chunk = sock.recv(n - len(data))
+        if not chunk:  # Connection closed
+            return None
+        data += chunk
+    return data
+
+
+# Create TCP socket (IPv4, Stream-based)
+server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+# Allow quick reuse of the port after restart
+server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+
+# Bind to address and port
+server.bind((HOST, PORT))
+
+# Listen for incoming connections (queue size 5)
+server.listen(5)
+print("Length-prefixed TCP server on", PORT)
+
+# Accept one client connection
+conn, addr = server.accept()
+print("Connected by", addr)
+
+try:
+    while True:
+        # Step 1: Read the 4-byte length header
+        hdr = recv_all(conn, 4)
+        if not hdr:
+            break  # Client disconnected
+
+        # '!I' = Network byte order (big-endian) unsigned int
+        (length,) = struct.unpack('!I', hdr)
+
+        # Step 2: Read exactly 'length' bytes of payload
+        payload = recv_all(conn, length)
+        if payload is None:
+            break
+
+        print("Got message:", payload.decode())
+
+        # Step 3: Echo back using same framing format
+        # First pack length, then append payload
+        conn.sendall(struct.pack('!I', len(payload)) + payload)
+
+finally:
+    conn.close()
+    server.close()
+\end{lstlisting}
+
+\section{Folder: SP\_practice}
+
+\subsection*{client.py}
+\begin{lstlisting}[style=labcode]
+import socket
+import threading
+import sys
+
+if len(sys.argv) != 3:
+    print("Usage: python3 tcp_chat_client.py <server_ip> <port>")
+    sys.exit(1)
+
+SERVER_IP = sys.argv[1]
+PORT = int(sys.argv[2])
+
+# Create TCP socket
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+# Connect to server
+client.connect((SERVER_IP, PORT))
+print("Connected to ChatIUT server. Type /quit to exit")
+
+def receive_messages():
+    while True:
+        try:
+            msg = client.recv(1024)
+            if not msg:
+                print('Server disconnected')
+                break
+            print(msg.decode('utf-8'))
+        except:
+            break
+
+def send_messages():
+    while True:
+        msg = input()
+        if msg.lower() == '/quit':
+            client.close()
+            print("Disconnected from server.")
+            break
+        try:
+            client.sendall(msg.encode('utf-8'))
+        except:
+            print("Error sending message.")
+            break
+
+recv_thread = threading.Thread(target=receive_messages, daemon=True)
+recv_thread.start()
+
+send_thread = threading.Thread(target=send_messages, daemon=True)
+send_thread.start()
+
+recv_thread.join()
+send_thread.join()
+\end{lstlisting}
+
+\subsection*{server.py}
+\begin{lstlisting}[style=labcode]
+import socket
+import threading 
+import logging
+
+logging.basicConfig(
+    filename='server.log',
+    level=logging.INFO,
+    format='%(asctime)s - %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
+
+# Create TCP socket
+server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+# Bind server
+server.bind(('0.0.0.0', 6006))
+
+# Listen for connections
+server.listen(5)
+
+print("TCP server listening on port 6006...")
+logging.info("TCP server listening on port 6006...")
+
+clients = []
+
+def broadcast(message, sender):
+    for client in clients:
+        if sender != client:
+            try:
+                client.sendall(message)
+            except:
+                client.remove(client)
+
+def handle_client(client_socket, addr):
+    while True:
+        try:
+            msg = client_socket.recv(1024)
+            if not msg:
+                break;
+            print(f"{addr} says: {msg.decode('utf-8')}")
+            logging.info(f"Forwarded message from {addr}: {msg.decode('utf-8')}")
+            broadcast(msg, client_socket)
+        except:
+            break
+    #disconnet
+    logging.info(f"{addr} disconnected")
+    clients.remove(client_socket)
+    client_socket.close()
+    print(f"{addr} disconnected")
+   
+# main
+try:
+    while True:
+        client_sock, addr = server.accept()
+        clients.append(client_sock)
+        thread = threading.Thread(target=handle_client, args=(client_sock, addr), daemon=True)
+        thread.start()
+except KeyboardInterrupt:
+    print("\nServer shutting down...")
+    logging.info("Server stopped")
+finally:
+    server.close();
+    server.close();
+\end{lstlisting}
+
+\end{document}
+

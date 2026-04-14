@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<!-- engineer -->
+	<interface hosts="centralRouter" names="eth0" address="192.35.8.1" netmask="255.255.255.192"/>
+<!-- 	Market -->
+	<interface hosts="centralRouter" names="eth1" address="192.35.8.129" netmask="255.255.255.240"/>
+<!-- 	Sales -->
+	<interface hosts="centralRouter" names="eth2" address="192.35.8.97" netmask="255.255.255.240"/>
+<!--  	Admin -->
+ 	<interface hosts="centralRouter" names="eth3" address="192.35.8.113" netmask="255.255.255.240"/>
+<!-- 	Management -->
+	<interface hosts="centralRouter" names="eth4" address="192.35.8.65" netmask="255.255.255.224"/>
+
+<interface hosts="engHost1" address="192.35.8.10" netmask="255.255.255.192"/>
+    <interface hosts="engHost2" address="192.35.8.11" netmask="255.255.255.192"/>
+    <interface hosts="engHost3" address="192.35.8.12" netmask="255.255.255.192"/>
+    
+    
+   <interface hosts="mktHost1" address="192.35.8.130" netmask="255.255.255.240"/>
+    <interface hosts="mktHost2" address="192.35.8.131" netmask="255.255.255.240"/>
+    <interface hosts="mktHost3" address="192.35.8.132" netmask="255.255.255.240"/>
+    
+       
+ <interface hosts="salesHost1" address="192.35.8.98" netmask="255.255.255.240"/>
+    <interface hosts="salesHost2" address="192.35.8.99" netmask="255.255.255.240"/>
+    <interface hosts="salesHost3" address="192.35.8.100" netmask="255.255.255.240"/>
+
+
+  <interface hosts="adminHost1" address="192.35.8.114" netmask="255.255.255.240"/>
+    <interface hosts="adminHost2" address="192.35.8.115" netmask="255.255.255.240"/>
+    <interface hosts="adminHost3" address="192.35.8.116" netmask="255.255.255.240"/>
+    
+      <interface hosts="mgmtHost1" address="192.35.8.66" netmask="255.255.255.224"/>
+    <interface hosts="mgmtHost2" address="192.35.8.67" netmask="255.255.255.224"/>
+    <interface hosts="mgmtHost3" address="192.35.8.68" netmask="255.255.255.224"/>
+
+
+	<route hosts="centralRouter" destination="192.35.8.0" netmask="255.255.255.192" interface="eth0"/>
+    <route hosts="centralRouter" destination="192.35.8.128" netmask="255.255.255.240"   interface="eth1"/>
+    <route hosts="centralRouter" destination="192.35.8.96" netmask="255.255.255.240" interface="eth2"/>
+    <route hosts="centralRouter" destination="192.35.8.112" netmask="255.255.255.240" interface="eth3"/>
+    <route hosts="centralRouter" destination="192.35.8.64" netmask="255.255.255.224"  interface="eth4"/>
+
+	<route hosts="engHost*" destination="*" netmask="*" gateway="192.35.8.1"/>
+    <route hosts="mktHost*" destination="*" netmask="*" gateway="192.35.8.129"/>
+    <route hosts="salesHost*" destination="*" netmask="*" gateway="192.35.8.97"/>
+    <route hosts="adminHost*" destination="*" netmask="*" gateway="192.35.8.113"/>
+    <route hosts="mgmtHost*" destination="*" netmask="*" gateway="192.35.8.65"/>
+
+
+</config>

@@ -1,0 +1,1 @@
+Questions are highly repetative for mid quiz as well as final (70%-90%)

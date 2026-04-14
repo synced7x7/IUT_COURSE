@@ -1,0 +1,12 @@
+Presentation (Quiz 2)
+Ajwad Abrar Mostofa, Junior Lecturer, CSE
+•
+Jan 23 (Edited Jan 25)
+There will be a presentation on Tuesday, 27 January, which will be considered equivalent to Quiz 2.
+This will be a group presentation.
+Each team will consist of 10 members.
+During the presentation, I will randomly select 2 students on the spot to present two design patterns.
+Each team will be assigned two design patterns in advance.
+The presentation duration will be 8 minutes per team.
+The presentation slides should contain 12 to 20 slides, including all content.
+Each design pattern slide set can include the following details (not limited to): Name of the design pattern, Category (Creational / Structural / Behavioral), Justification for why it falls under that category, Problem it solves, Real-world example, When to use the pattern, Coding Example.
